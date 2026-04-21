@@ -1,82 +1,305 @@
 <?xml version="1.0" encoding="UTF-8"?>
 {% import "macros/cda.xml.j2" as cda %}
-<ClinicalDocument xmlns="urn:hl7-org:v3" xmlns:fias="urn:hl7-ru:fias" xmlns:address="urn:hl7-ru:address">
-    <!-- CDA Header -->
+<ClinicalDocument xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:identity="urn:hl7-ru:identity" xmlns:address="urn:hl7-ru:address" xmlns:medService="urn:hl7-ru:medService" xmlns:fias="urn:hl7-ru:fias">
     <realmCode code="RU"/>
     <typeId root="2.16.840.1.113883.1.3" extension="POCD_MT000040"/>
+    <templateId root="1.2.643.5.1.13.13.15.13.7"/>
     {{ cda.id(header.id) }}
-    {{ cda.code(header.type_code) }}
+    <code code="{{ header.type_code.code }}" codeSystem="{{ header.type_code.codeSystem }}" 
+          codeSystemName="{{ header.type_code.codeSystemName }}" codeSystemVersion="{{ header.type_code.codeSystemVersion }}" 
+          displayName="{{ header.type_code.displayName }}">
+        <translation code="{{ header.type_code.translation.code }}" codeSystem="{{ header.type_code.translation.codeSystem }}" 
+                     codeSystemName="{{ header.type_code.translation.codeSystemName }}" codeSystemVersion="{{ header.type_code.translation.codeSystemVersion }}" 
+                     displayName="{{ header.type_code.translation.displayName }}"/>
+    </code>
     <title>{{ header.title }}</title>
-    <effectiveTime value="{{ event_date | hl7date }}"/>
-    <confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25"/>
+    <effectiveTime value="{{ event.period.low | hl7date }}"/>
+    <confidentialityCode code="{{ header.confidentiality.code }}" codeSystem="{{ header.confidentiality.codeSystem }}" 
+                         codeSystemName="{{ header.confidentiality.codeSystemName }}"
+                         codeSystemVersion="{{ header.confidentiality.version }}" displayName="{{ header.confidentiality.displayName }}"/>
     <languageCode code="ru-RU"/>
+    <setId root="{{ header.set_id.root }}" extension="{{ header.set_id.extension }}"/>
+    <versionNumber value="{{ header.version }}"/>
 
-    <!-- Данные пациента, врача и организации (упрощено) -->
     <recordTarget>
         <patientRole>
-            {{ cda.id(patient.id) }}
+            <id root="{{ patient.id.root }}" extension="{{ patient.id.extension }}"/>
+            <id root="1.2.643.100.3" extension="{{ patient.snils }}"/>
+            <identity:IdentityDoc>
+                <identity:IdentityCardType codeSystem="{{ patient.identity_doc.type.codeSystem }}" 
+                                           codeSystemName="{{ patient.identity_doc.type.codeSystemName }}" 
+                                           code="{{ patient.identity_doc.type.code }}" 
+                                           displayName="{{ patient.identity_doc.type.displayName }}" 
+                                           codeSystemVersion="{{ patient.identity_doc.type.version }}"/>
+                <identity:Series>{{ patient.identity_doc.series }}</identity:Series>
+                <identity:Number>{{ patient.identity_doc.number }}</identity:Number>
+                <identity:IssueOrgName>{{ patient.identity_doc.issue_org }}</identity:IssueOrgName>
+                <identity:IssueOrgCode>{{ patient.identity_doc.issue_org_code }}</identity:IssueOrgCode>
+                <identity:IssueDate value="{{ patient.identity_doc.issue_date | hl7date }}"/>
+            </identity:IdentityDoc>
+            {% if patient.insurance_policy %}
+            <identity:InsurancePolicy>
+                <identity:InsurancePolicyType code="{{ patient.insurance_policy.type.code }}" 
+                                              codeSystem="{{ patient.insurance_policy.type.codeSystem }}" 
+                                              codeSystemName="{{ patient.insurance_policy.type.codeSystemName }}" 
+                                              displayName="{{ patient.insurance_policy.type.displayName }}" 
+                                              codeSystemVersion="{{ patient.insurance_policy.type.version }}"/>
+                <identity:Number>{{ patient.insurance_policy.number }}</identity:Number>
+            </identity:InsurancePolicy>
+            {% endif %}
             {{ cda.addr(patient.address) }}
+            <telecom use="WP" value="{{ patient.contacts.phone }}"/>
             <patient>
                 {{ cda.person(patient.name) }}
-                <administrativeGenderCode code="{{ patient.gender.code }}" codeSystem="1.2.643.5.1.13.13.11.1040"/>
+                <administrativeGenderCode code="{{ patient.gender.code }}" codeSystem="1.2.643.5.1.13.13.11.1040"
+                                          codeSystemName="Пол пациента" codeSystemVersion="2.1" displayName="{{ patient.gender.displayName }}"/>
                 <birthTime value="{{ patient.birth_date | hl7date }}"/>
             </patient>
+            <providerOrganization>
+                <id root="{{ organization.id }}"/>
+                <identity:Props>
+                    <identity:Ogrn>{{ organization.ogrn }}</identity:Ogrn>
+                    <identity:Okpo>{{ organization.okpo }}</identity:Okpo>
+                    <identity:Okato>{{ organization.okato }}</identity:Okato>
+                </identity:Props>
+                <name>{{ organization.name }}</name>
+                <telecom use="WP" value="{{ organization.phone }}"/>
+                {{ cda.addr(organization.address) }}
+            </providerOrganization>
         </patientRole>
     </recordTarget>
 
-    <!-- Тело документа -->
+    <author>
+        <time nullFlavor="NI"/>
+        <assignedAuthor>
+            <id root="{{ author.id.root }}" extension="{{ author.id.extension }}"/>
+            <id root="1.2.643.100.3" extension="{{ author.snils }}"/>
+            {{ cda.code(author.position, tag='code') }}
+            {{ cda.addr(author.address) }}
+            <telecom use="WP" value="{{ author.phone }}"/>
+            <assignedPerson>
+                {{ cda.person(author.name) }}
+            </assignedPerson>
+            <representedOrganization classCode="ORG">
+                <id root="{{ organization.id }}"/>
+                <name>{{ organization.name }}</name>
+                <telecom use="WP" value="{{ organization.phone }}"/>
+                {{ cda.addr(organization.address) }}
+            </representedOrganization>
+        </assignedAuthor>
+    </author>
+
+    <custodian>
+        <assignedCustodian>
+            <representedCustodianOrganization classCode="ORG">
+                <id root="{{ organization.id }}"/>
+                <name>{{ organization.name }}</name>
+                <telecom use="WP" value="{{ organization.phone }}"/>
+                {{ cda.addr(organization.address) }}
+            </representedCustodianOrganization>
+        </assignedCustodian>
+    </custodian>
+
+    <informationRecipient>
+        <intendedRecipient>
+            <receivedOrganization>
+                <id root="1.2.643.5.1.13"/>
+                <name>Министерство здравоохранения Российской Федерации</name>
+            </receivedOrganization>
+        </intendedRecipient>
+    </informationRecipient>
+
+    <documentationOf>
+        <serviceEvent>
+            <code code="{{ event.type.code }}" codeSystem="1.2.643.5.1.13.13.99.2.726" codeSystemName="Типы документированных событий" displayName="{{ event.type.displayName }}" codeSystemVersion="{{ event.type.get('version') or '3.50' }}"/>
+            <effectiveTime>
+                <low value="{{ event.period.low | hl7date }}"/>
+                <high value="{{ event.period.high | hl7date }}"/>
+            </effectiveTime>
+            {% if event.get('conditions') %}
+            <medService:serviceCond codeSystem="1.2.643.5.1.13.13.99.2.322" codeSystemName="Условия оказания медицинской помощи" 
+                                   code="{{ event.conditions.code }}" displayName="{{ event.conditions.displayName }}" 
+                                   codeSystemVersion="{{ event.conditions.get('version') or '3.1' }}"/>
+            {% endif %}
+        </serviceEvent>
+    </documentationOf>
+
+    <componentOf>
+        <encompassingEncounter>
+            <id root="{{ header.set_id.root }}.15" extension="{{ header.set_id.extension }}"/>
+            <code code="1" codeSystem="1.2.643.5.1.13.13.99.2.723" codeSystemName="Виды медицинской помощи" displayName="Амбулаторная" codeSystemVersion="1.3"/>
+            <medService:DocNumber>{{ header.id.extension }}</medService:DocNumber>
+            <effectiveTime>
+                <low value="{{ encounter.period.low | hl7date }}"/>
+                <high value="{{ encounter.period.high | hl7date }}"/>
+            </effectiveTime>
+        </encompassingEncounter>
+    </componentOf>
+
     <component>
         <structuredBody>
-            <!-- Секция ЖАЛОБЫ -->
             <component>
                 <section>
-                    <code code="S_COMPL" codeSystem="1.2.643.5.1.13.13.99.2.197" displayName="Жалобы"/>
-                    <title>Жалобы</title>
-                    <text>{{ complaints }}</text>
-                </section>
-            </component>
-
-            <!-- Секция ОБЪЕКТИВНЫЙ СТАТУС -->
-            <component>
-                <section>
-                    <code code="S_OBJ" codeSystem="1.2.643.5.1.13.13.99.2.197" displayName="Объективный статус"/>
-                    <title>Объективный статус</title>
-                    <text>{{ objective_status }}</text>
-                </section>
-            </component>
-
-            <!-- Секция ДИАГНОЗЫ -->
-            <component>
-                <section>
-                    <code code="DX" codeSystem="1.2.643.5.1.13.13.99.2.197" displayName="Диагноз"/>
-                    <title>Диагноз</title>
-                    <text>
-                        <list>
-                        {% for dx in diagnoses %}
-                            <item>{{ dx.code.displayName }}: {{ dx.text }}</item>
-                        {% endfor %}
-                        </list>
-                    </text>
-                    {% for dx in diagnoses %}
+                    <code code="DOCINFO" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Сведения о документе" codeSystemVersion="1.38"/>
                     <entry>
                         <observation classCode="OBS" moodCode="EVN">
-                            {{ cda.code(dx.code) }}
-                            <value xsi:type="CD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-                                   code="{{ dx.code.code }}" codeSystem="1.2.643.5.1.13.13.11.1005"/>
+                            <code code="800" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Обращение" codeSystemVersion="5.69"/>
+                            <value xsi:type="CD" code="{{ document_info.case_type.code }}" 
+                                   codeSystem="1.2.643.5.1.13.13.11.1007" 
+                                   codeSystemName="Вид случая госпитализации или обращения (первичный, повторный)" 
+                                   displayName="{{ document_info.case_type.displayName }}" 
+                                   codeSystemVersion="{{ document_info.case_type.get('version') or '2.1' }}"/>
                         </observation>
                     </entry>
-                    {% endfor %}
+                    <entry>
+                        <observation classCode="OBS" moodCode="EVN">
+                            <code code="801" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Место проведения" codeSystemVersion="5.69"/>
+                            <value xsi:type="CD" code="1" codeSystem="1.2.643.5.1.13.13.11.1008" codeSystemName="Место оказания медицинской помощи" displayName="Амбулаторно-поликлиническое учреждение" codeSystemVersion="5.1"/>
+                        </observation>
+                    </entry>
+                    <entry>
+                        <observation classCode="OBS" moodCode="EVN">
+                            <code code="804" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Состояние пациента" codeSystemVersion="5.69"/>
+                            <value xsi:type="CD" code="{{ document_info.patient_condition.code }}" 
+                                   codeSystem="1.2.643.5.1.13.13.11.1006" 
+                                   codeSystemName="Степень тяжести состояния пациента" 
+                                   displayName="{{ document_info.patient_condition.displayName }}" 
+                                   codeSystemVersion="{{ document_info.patient_condition.get('version') or '2.4' }}"/>
+                        </observation>
+                    </entry>
+                    <entry>
+                        <observation classCode="OBS" moodCode="EVN">
+                            <code code="836" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Объективные данные" codeSystemVersion="5.69"/>
+                            <value xsi:type="ST">{{ objective_status }}</value>
+                        </observation>
+                    </entry>
+                    <entry>
+                        <observation classCode="OBS" moodCode="EVN">
+                            <code code="806" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Заключение консультации" codeSystemVersion="5.69"/>
+                            <value xsi:type="ST">{{ recommendations }}</value>
+                        </observation>
+                    </entry>
                 </section>
             </component>
-
-            <!-- Секция РЕКОМЕНДАЦИИ -->
             <component>
                 <section>
-                    <code code="RECOM" codeSystem="1.2.643.5.1.13.13.99.2.197" displayName="Рекомендации"/>
-                    <title>Рекомендации</title>
-                    <text>{{ recommendations }}</text>
+                    <code code="BENEFITS" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Льготы" codeSystemVersion="1.38"/>
+                    <entry>
+                        <observation classCode="OBS" moodCode="EVN">
+                            <code code="811" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Льготная категория" codeSystemVersion="5.69"/>
+                            <value xsi:type="CD" code="1.00000.0216" codeSystem="1.2.643.5.1.13.13.99.2.541" codeSystemName="Льготные категории граждан" displayName="Инвалиды III группы" codeSystemVersion="6.24"/>
+                        </observation>
+                    </entry>
+                </section>
+            </component>
+            <component>
+                <section>
+                    <code code="COMPLNTS" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Жалобы" codeSystemVersion="1.38"/>
+                    <entry>
+                        <observation classCode="OBS" moodCode="EVN">
+                            <code code="835" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Жалобы пациента" codeSystemVersion="5.69"/>
+                            <value xsi:type="ST">{{ complaints }}</value>
+                        </observation>
+                    </entry>
+                </section>
+            </component>
+            <component>
+                <section>
+                    <code code="ANAM" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Анамнез заболевания" codeSystemVersion="1.38"/>
+                    <entry>
+                        <observation classCode="OBS" moodCode="EVN">
+                            <code code="7006" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Текстовое описание" codeSystemVersion="5.69"/>
+                            <value xsi:type="ST">{{ anamnesis_disease }}</value>
+                        </observation>
+                    </entry>
+                </section>
+            </component>
+            <component>
+                <section>
+                    <code code="LANAM" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Анамнез жизни" codeSystemVersion="1.38"/>
+                    <entry>
+                        <observation classCode="OBS" moodCode="EVN">
+                            <code code="7006" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Текстовое описание" codeSystemVersion="5.69"/>
+                            <value xsi:type="ST">{{ anamnesis_disease }}</value>
+                        </observation>
+                    </entry>
+                </section>
+            </component>
+            <component>
+                <section>
+                    <code code="DISABILITY" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Инвалидность" codeSystemVersion="1.38"/>
+                    <entry>
+                        <observation classCode="OBS" moodCode="EVN">
+                            <code code="814" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Инвалидность" codeSystemVersion="5.69"/>
+                            <effectiveTime>
+                                <low value="{{ event.period.low | hl7date }}"/>
+                                <high nullFlavor="PINF"/>
+                            </effectiveTime>
+                            <value xsi:type="CD" code="3" codeSystem="1.2.643.5.1.13.13.11.1053" codeSystemName="Группы инвалидности" displayName="Третья группа" codeSystemVersion="3.4"/>
+                        </observation>
+                    </entry>
+                </section>
+            </component>
+            <component>
+                <section>
+                    <code code="SOCANAM" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Социальный анамнез" codeSystemVersion="1.38"/>
+                    <entry>
+                        <observation classCode="OBS" moodCode="EVN">
+                            <code code="12006" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Причина нетрудоспособности" codeSystemVersion="5.69"/>
+                            <effectiveTime>
+                                <low value="{{ event.period.low | hl7date }}"/>
+                                <high value="{{ event.period.low | hl7date }}"/>
+                            </effectiveTime>
+                            <value xsi:type="CD" code="1" codeSystem="1.2.643.5.1.13.13.11.1044" codeSystemName="Причины выдачи документа о временной нетрудоспособности" displayName="Заболевание" codeSystemVersion="4.2"/>
+                        </observation>
+                    </entry>
+                </section>
+            </component>
+            <component>
+                <section>
+                    <code code="DGN" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Диагнозы" codeSystemVersion="1.38"/>
+                    <entry>
+                        <observation classCode="OBS" moodCode="EVN">
+                            <id root="{{ diagnoses[0].id.root }}" extension="{{ diagnoses[0].id.extension }}"/>
+                            <code code="838" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Сведения об установленном диагнозе" codeSystemVersion="5.69"/>
+                            <effectiveTime value="{{ encounter.period.low | hl7date }}"/>
+                            <entryRelationship typeCode="COMP">
+                                <observation classCode="OBS" moodCode="EVN">
+                                    <code code="1" codeSystem="1.2.643.5.1.13.13.11.1077" codeSystemName="Тип диагноза" displayName="Основное заболевание" codeSystemVersion="2.2"/>
+                                    <value xsi:type="CD" code="{{ diagnoses[0].code.code }}" codeSystem="{{ diagnoses[0].code.codeSystem }}"
+                                           codeSystemName="{{ diagnoses[0].code.codeSystemName }}" codeSystemVersion="{{ diagnoses[0].code.codeSystemVersion }}" displayName="{{ diagnoses[0].code.displayName }}"/>
+                                    <entryRelationship typeCode="COMP">
+                                        <observation classCode="OBS" moodCode="EVN">
+                                            <code code="12014" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Диагноз по МКБ" codeSystemVersion="5.69"/>
+                                            <value xsi:type="CD" code="{{ diagnoses[0].code.code }}" codeSystem="1.2.643.5.1.13.13.11.1049"
+                                                   codeSystemName="МКБ-10" codeSystemVersion="1.1" displayName="{{ diagnoses[0].code.displayName }}"/>
+                                        </observation>
+                                    </entryRelationship>
+                                    <entryRelationship typeCode="COMP">
+                                        <observation classCode="OBS" moodCode="EVN">
+                                            <code code="823" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Характер заболевания" codeSystemVersion="5.69"/>
+                                            <value xsi:type="CD" code="{{ diagnoses[0].code.code }}" codeSystem="1.2.643.5.1.13.13.11.1005"
+                                                   codeSystemName="МКБ-10" codeSystemVersion="1.1" displayName="{{ diagnoses[0].code.displayName }}"/>
+                                        </observation>
+                                    </entryRelationship>
+                                </observation>
+                            </entryRelationship>
+                        </observation>
+                    </entry>
+                </section>
+            </component>
+            <component>
+                <section>
+                    <code code="REGIME" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Рекомендации" codeSystemVersion="1.38"/>
+                    <entry>
+                        <observation classCode="OBS" moodCode="EVN">
+                            <code code="7006" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Текстовое описание" codeSystemVersion="5.69"/>
+                            <value xsi:type="ST">{{ recommendations }}</value>
+                        </observation>
+                    </entry>
                 </section>
             </component>
         </structuredBody>
     </component>
 </ClinicalDocument>
+

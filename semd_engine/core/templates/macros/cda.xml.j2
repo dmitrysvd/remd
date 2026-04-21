@@ -1,32 +1,30 @@
 {% macro id(ii) -%}
-<id root="{{ ii.root }}"{{ ii.extension | xml_attr('extension') }}{{ ii.assigningAuthorityName | xml_attr('assigningAuthorityName') }}/>
+<id root="{{ ii.root }}"{{ ii.get('extension') | xml_attr('extension') }}/>
 {%- endmacro %}
 
 {% macro code(cd, tag='code') -%}
-<{{ tag }} code="{{ cd.code }}" codeSystem="{{ cd.codeSystem }}" 
-    {{ cd.codeSystemName | xml_attr('codeSystemName') }} 
-    {{ cd.displayName | xml_attr('displayName') }}>
-{%- endmacro %}
-
-
-{% macro code(cd, tag='code') -%}
-<{{ tag }} code="{{ cd.code }}" codeSystem="{{ cd.codeSystem }}" 
-    {{ cd.codeSystemName | xml_attr('codeSystemName') }} 
-    {{ cd.displayName | xml_attr('displayName') }}>
-    {% if cd.originalText %}<originalText>{{ cd.originalText }}</originalText>{% endif %}
-</{{ tag }}>
+<{{ tag }} code="{{ cd.code }}" codeSystem="{{ cd.codeSystem }}" codeSystemName="{{ cd.codeSystemName }}" codeSystemVersion="{{ cd.codeSystemVersion }}" displayName="{{ cd.displayName }}">{% if cd.get('originalText') %}<originalText>{{ cd.originalText }}</originalText>{% endif %}</{{ tag }}>
 {%- endmacro %}
 
 {% macro addr(a) -%}
 <addr>
+    {% if a.get('type') %}
+    <address:Type code="{{ a.type.code }}" codeSystem="1.2.643.5.1.13.13.11.1504" 
+                  codeSystemName="Тип адреса пациента" displayName="{{ a.type.displayName }}" 
+                  codeSystemVersion="{{ a.type.get('version') or '1.4' }}"/>
+    {% endif %}
     <streetAddressLine>{{ a.text }}</streetAddressLine>
-    {% if a.state %}<state>{{ a.state }}</state>{% endif %}
-    {% if a.city %}<city>{{ a.city }}</city>{% endif %}
-    {% if a.street %}<street>{{ a.street }}</street>{% endif %}
-    {% if a.house %}<house>{{ a.house }}</house>{% endif %}
-    {% if a.postalCode %}<postalCode>{{ a.postalCode }}</postalCode>{% endif %}
-    {% if a.fias_guid %}
-    <additionalLocator>{{ a.fias_guid }}</additionalLocator>
+    {% if a.get('state_code') %}
+    <address:stateCode code="{{ a.state_code.code }}" codeSystem="1.2.643.5.1.13.13.99.2.206" 
+                       codeSystemName="Субъекты Российской Федерации" displayName="{{ a.state_code.displayName }}" 
+                       codeSystemVersion="{{ a.state_code.get('version') or '6.5' }}"/>
+    {% endif %}
+    <postalCode>{{ a.get('postal_code') or '101000' }}</postalCode>
+    {% if a.get('fias') %}
+    <fias:Address>
+        <fias:AOGUID>{{ a.fias.aoguid }}</fias:AOGUID>
+        {% if a.fias.get('houseguid') %}<fias:HOUSEGUID>{{ a.fias.houseguid }}</fias:HOUSEGUID>{% endif %}
+    </fias:Address>
     {% endif %}
 </addr>
 {%- endmacro %}
@@ -35,6 +33,6 @@
 <name>
     <family>{{ p.family }}</family>
     <given>{{ p.given }}</given>
-    {% if p.patronymic %}<identity>{{ p.patronymic }}</identity>{% endif %}
+    {% if p.get('patronymic') %}<identity:Patronymic>{{ p.patronymic }}</identity:Patronymic>{% endif %}
 </name>
 {%- endmacro %}

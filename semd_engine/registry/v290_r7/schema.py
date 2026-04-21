@@ -4,13 +4,14 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from semd_engine.core.cda_types import CD
+from semd_engine.core.cda_types import CD, II
 from semd_engine.core.ui_metadata import UICondition, UIFieldMetadata, UIMetadataMixin
 
 
 class DiagnosisModel(BaseModel):
     """Секция Диагноза (МКБ-10)."""
 
+    id: II | None = None
     code: Annotated[
         CD,
         UIFieldMetadata(

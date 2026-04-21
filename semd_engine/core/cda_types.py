@@ -17,7 +17,9 @@ class CD(BaseModel):
     code: str
     codeSystem: str
     codeSystemName: str | None = None
+    codeSystemVersion: str | None = None
     displayName: str | None = None
+    originalText: str | None = None
 
 
 class TS(BaseModel):
