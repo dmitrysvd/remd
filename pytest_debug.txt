@@ -1,0 +1,17 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.2, pytest-9.0.3, pluggy-1.6.0 -- /home/dmitry/projects/remd/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/dmitry/projects/remd
+configfile: pyproject.toml
+collecting ... collected 2 items
+
+tests/test_v290_r7_generation.py::test_consultation_v7_generation PASSED [ 50%]
+tests/test_v290_r7_generation.py::test_invalid_data_raises_error PASSED  [100%]
+
+=============================== warnings summary ===============================
+semd_engine/registry/v290_r7/schema.py:71
+  /home/dmitry/projects/remd/semd_engine/registry/v290_r7/schema.py:71: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    class ConsultationProtocolV7(BaseModel, UIMetadataMixin):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========================= 2 passed, 1 warning in 0.07s =========================

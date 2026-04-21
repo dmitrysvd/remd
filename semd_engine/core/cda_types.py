@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, List
+
 from pydantic import BaseModel, Field
 
 
@@ -7,8 +7,8 @@ class II(BaseModel):
     """Instance Identifier (OID + extension)."""
 
     root: str
-    extension: Optional[str] = None
-    assigningAuthorityName: Optional[str] = None
+    extension: str | None = None
+    assigningAuthorityName: str | None = None
 
 
 class CD(BaseModel):
@@ -16,8 +16,8 @@ class CD(BaseModel):
 
     code: str
     codeSystem: str
-    codeSystemName: Optional[str] = None
-    displayName: Optional[str] = None
+    codeSystemName: str | None = None
+    displayName: str | None = None
 
 
 class TS(BaseModel):
@@ -29,13 +29,13 @@ class TS(BaseModel):
 class ADDR(BaseModel):
     """Address (ФИАС + текстовое представление)."""
 
-    postalCode: Optional[str] = None
-    state: Optional[str] = None
-    city: Optional[str] = None
-    street: Optional[str] = None
-    house: Optional[str] = None
-    flat: Optional[str] = None
-    fias_guid: Optional[str] = Field(None, alias="a_guid")
+    postalCode: str | None = None
+    state: str | None = None
+    city: str | None = None
+    street: str | None = None
+    house: str | None = None
+    flat: str | None = None
+    fias_guid: str | None = Field(None, alias="a_guid")
     text: str
 
 
@@ -44,7 +44,7 @@ class PN(BaseModel):
 
     family: str
     given: str
-    patronymic: Optional[str] = None
+    patronymic: str | None = None
 
 
 class CE(CD):

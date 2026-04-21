@@ -36,6 +36,15 @@
                 </section>
             </component>
 
+            <!-- Секция ОБЪЕКТИВНЫЙ СТАТУС -->
+            <component>
+                <section>
+                    <code code="S_OBJ" codeSystem="1.2.643.5.1.13.13.99.2.197" displayName="Объективный статус"/>
+                    <title>Объективный статус</title>
+                    <text>{{ objective_status }}</text>
+                </section>
+            </component>
+
             <!-- Секция ДИАГНОЗЫ -->
             <component>
                 <section>
@@ -57,6 +66,15 @@
                         </observation>
                     </entry>
                     {% endfor %}
+                </section>
+            </component>
+
+            <!-- Секция РЕКОМЕНДАЦИИ -->
+            <component>
+                <section>
+                    <code code="RECOM" codeSystem="1.2.643.5.1.13.13.99.2.197" displayName="Рекомендации"/>
+                    <title>Рекомендации</title>
+                    <text>{{ recommendations }}</text>
                 </section>
             </component>
         </structuredBody>

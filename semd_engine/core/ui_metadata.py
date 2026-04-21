@@ -1,7 +1,11 @@
 from __future__ import annotations
-from dataclasses import dataclass, field as dc_field, asdict
-from typing import Any, List, Optional, Literal, Union, Dict
-from pydantic import BaseModel, Field
+
+from dataclasses import asdict, dataclass
+from dataclasses import field as dc_field
+from typing import TYPE_CHECKING, Any, Literal
+
+if TYPE_CHECKING:
+    from pydantic import BaseModel
 
 
 @dataclass
@@ -10,7 +14,7 @@ class UICondition:
 
     field: str
     op: Literal["eq", "neq", "in", "not_in", "empty", "not_empty"]
-    value: Optional[Any] = None
+    value: Any | None = None
 
 
 @dataclass
@@ -19,23 +23,28 @@ class UIFieldMetadata:
 
     component: str  # Тип компонента: 'TextInput', 'Select', 'NSIAutocomplete', etc.
     label: str
-    placeholder: Optional[str] = None
-    hint: Optional[str] = None
-    group: Optional[str] = None  # Группировка полей (секции формы)
-    visibility: Optional[UICondition] = None
-    required_if: Optional[UICondition] = None
-    props: Dict[str, Any] = dc_field(default_factory=dict)
+    placeholder: str | None = None
+    hint: str | None = None
+    group: str | None = None  # Группировка полей (секции формы)
+    visibility: UICondition | None = None
+    required_if: UICondition | None = None
+    props: dict[str, Any] = dc_field(default_factory=dict)
 
 
 class UIMetadataMixin:
     """Миксин для извлечения UI схемы из Pydantic модели."""
 
     @classmethod
-    def get_ui_schema(cls) -> Dict[str, Any]:
-        schema = cls.model_json_schema()
+    def get_ui_schema(cls) -> dict[str, Any]:
+        # type hint for pyright
+        if not hasattr(cls, "model_json_schema"):
+            raise TypeError("UIMetadataMixin must be used with Pydantic BaseModel")
+
+        model_cls: type[BaseModel] = cls  # type: ignore
+        schema = model_cls.model_json_schema()
         ui_schema = {}
 
-        for name, field in cls.model_fields.items():
+        for name, field in model_cls.model_fields.items():
             # Ищем UIFieldMetadata в аннотациях (через Annotated)
             for metadata in field.metadata:
                 if isinstance(metadata, UIFieldMetadata):

@@ -1,12 +1,12 @@
 import asyncio
 import json
+
+from semd_engine.core.renderer import CDARenderer
 from semd_engine.registry.v290_r7.schema import (
     ConsultationProtocolV7,
     DiagnosisModel,
     PrescribedMedication,
 )
-from semd_engine.core.renderer import CDARenderer
-from semd_engine.core.cda_types import CD
 
 
 async def demo():
@@ -73,7 +73,10 @@ async def demo():
     print("\n--- GENERATING CDA XML ---")
     renderer = CDARenderer("semd_engine/registry/v290_r7/templates")
     # Добавляем путь к макросам в поиск шаблонов
-    renderer.env.loader.searchpath.append("semd_engine/core/templates")
+    from jinja2 import FileSystemLoader
+
+    if isinstance(renderer.env.loader, FileSystemLoader):
+        renderer.env.loader.searchpath.append("semd_engine/core/templates")
 
     xml_output = renderer.render("main.xml.j2", render_data)
     print(xml_output[:1000] + "...")  # Печатаем начало для проверки

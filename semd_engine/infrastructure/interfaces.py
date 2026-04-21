@@ -1,16 +1,17 @@
-from typing import Protocol, Optional, Any, Dict, List
 from abc import ABC, abstractmethod
-from .cda_types import CD
+from typing import Any, Protocol
+
+from ..core.cda_types import CD
 
 
 class INsiResolver(Protocol):
     """Интерфейс для получения данных из справочников НСИ."""
 
-    async def get_code(self, catalog_oid: str, internal_id: str) -> Optional[CD]:
+    async def get_code(self, catalog_oid: str, internal_id: str) -> CD | None:
         """Преобразует внутренний ID системы в объект CDA CD (код, название, OID)."""
         ...
 
-    async def search(self, catalog_oid: str, query: str) -> List[CD]:
+    async def search(self, catalog_oid: str, query: str) -> list[CD]:
         """Поиск по справочнику для UI-компонентов."""
         ...
 
@@ -18,11 +19,11 @@ class INsiResolver(Protocol):
 class IDataSource(Protocol):
     """Интерфейс для доступа к доменным данным системы."""
 
-    async def get_patient_data(self, patient_id: str) -> Dict[str, Any]: ...
+    async def get_patient_data(self, patient_id: str) -> dict[str, Any]: ...
 
-    async def get_doctor_data(self, doctor_id: str) -> Dict[str, Any]: ...
+    async def get_doctor_data(self, doctor_id: str) -> dict[str, Any]: ...
 
-    async def get_encounter_data(self, encounter_id: str) -> Dict[str, Any]: ...
+    async def get_encounter_data(self, encounter_id: str) -> dict[str, Any]: ...
 
 
 class IBaseFetcher(ABC):

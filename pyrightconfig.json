@@ -1,0 +1,9 @@
+{
+    "venvPath": ".",
+    "venv": ".venv",
+    "include": [
+        "semd_engine",
+        "demo.py"
+    ],
+    "typeCheckingMode": "basic"
+}

@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import List
 
 
 class A(BaseModel):
@@ -7,7 +6,7 @@ class A(BaseModel):
 
 
 class B(BaseModel):
-    items: List[A]
+    items: list[A]
 
 
 B.model_rebuild()

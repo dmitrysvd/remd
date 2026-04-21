@@ -1,0 +1,46 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.2, pytest-9.0.3, pluggy-1.6.0
+rootdir: /home/dmitry/projects/remd
+configfile: pyproject.toml
+collected 2 items
+
+tests/test_v290_r7_generation.py F.                                      [100%]
+
+=================================== FAILURES ===================================
+_______________________ test_consultation_v7_generation ________________________
+
+renderer = <semd_engine.core.renderer.CDARenderer object at 0x7fe0b9922a50>
+sample_data = {'anamnesis_disease': 'Тестовый анамнез', 'complaints': 'Тестовая жалоба', 'diagnoses': [{'code': {'code': 'K29.5', 'c...yName': 'Хронический гастрит'}, 'kind': 'main', 'text': 'Основной диагноз'}], 'event_date': '2026-04-21 14:00:00', ...}
+header_data = {'header': {'id': {'extension': 'TEST-123', 'root': '1.2.643.5.1.13.13.16.1.1'}, 'title': 'Протокол консультации', 'ty...te': '1990-01-01', 'gender': {'code': '1'}, 'id': {'extension': 'PAT-999', 'root': '1.2.643.5.1.13.13.16.1.1.1'}, ...}}
+
+    def test_consultation_v7_generation(renderer, sample_data, header_data):
+        # 1. Validate data
+        model = ConsultationProtocolV7(**sample_data)
+    
+        # 2. Prepare render data
+        render_data = model.model_dump()
+        render_data.update(header_data)
+    
+        # 3. Render
+        xml_output = renderer.render("main.xml.j2", render_data)
+    
+        # 4. Assertions
+        assert "<?xml" in xml_output
+        assert "<ClinicalDocument" in xml_output
+        assert 'extension="TEST-123"' in xml_output
+        assert "Тестовая жалоба" in xml_output
+        assert "K29.5" in xml_output
+        assert "Хронический гастрит" in xml_output
+>       assert "Тестовые рекомендации" in xml_output
+E       assert 'Тестовые рекомендации' in '<?xml version="1.0" encoding="UTF-8"?>\n<ClinicalDocument xmlns="urn:hl7-org:v3" xmlns:fias="urn:hl7-ru:fias" xmlns:a...                </section>\n            </component>\n        </structuredBody>\n    </component>\n</ClinicalDocument>'
+
+tests/test_v290_r7_generation.py:77: AssertionError
+=============================== warnings summary ===============================
+semd_engine/registry/v290_r7/schema.py:71
+  /home/dmitry/projects/remd/semd_engine/registry/v290_r7/schema.py:71: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    class ConsultationProtocolV7(BaseModel, UIMetadataMixin):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_v290_r7_generation.py::test_consultation_v7_generation - as...
+==================== 1 failed, 1 passed, 1 warning in 0.08s ====================

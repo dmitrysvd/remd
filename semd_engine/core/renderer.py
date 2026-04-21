@@ -1,6 +1,6 @@
-import datetime
+from typing import Any
+
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from typing import Any, Dict
 
 
 class CDARenderer:
@@ -15,7 +15,7 @@ class CDARenderer:
         self.env.filters["hl7date"] = self._hl7date_filter
         self.env.filters["xml_attr"] = self._xml_attr_filter
 
-    def render(self, template_name: str, data: Dict[str, Any]) -> str:
+    def render(self, template_name: str, data: dict[str, Any]) -> str:
         template = self.env.get_template(template_name)
         return template.render(**data)
 
