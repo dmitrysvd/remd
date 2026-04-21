@@ -184,6 +184,7 @@ def full_render_data():
                 "kind": "main",
             }
         ],
+        "prescriptions": [],
         "recommendations": "Тестовые рекомендации",
     }
 

@@ -299,6 +299,31 @@
                     </entry>
                 </section>
             </component>
+            {% if prescriptions %}
+            <component>
+                <section>
+                    <code code="DRUG" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Назначенные лекарственные препараты" codeSystemVersion="1.38"/>
+                    {% for p in prescriptions %}
+                    <entry>
+                        <substanceAdministration classCode="SBADM" moodCode="INT">
+                            <text>{{ p.dosage_text }}</text>
+                            <consumable>
+                                <manufacturedProduct>
+                                    <manufacturedMaterial>
+                                        {% if p.is_nsi and p.nsi_code %}
+                                        {{ cda.code(p.nsi_code) }}
+                                        {% else %}
+                                        <name>{{ p.manual_text }}</name>
+                                        {% endif %}
+                                    </manufacturedMaterial>
+                                </manufacturedProduct>
+                            </consumable>
+                        </substanceAdministration>
+                    </entry>
+                    {% endfor %}
+                </section>
+            </component>
+            {% endif %}
         </structuredBody>
     </component>
 </ClinicalDocument>

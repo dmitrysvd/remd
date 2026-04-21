@@ -8,7 +8,7 @@ from semd_engine.core.cda_types import CD, II
 from semd_engine.core.ui_metadata import UICondition, UIFieldMetadata, UIMetadataMixin
 
 
-class DiagnosisModel(BaseModel):
+class DiagnosisModel(BaseModel, UIMetadataMixin):
     """Секция Диагноза (МКБ-10)."""
 
     id: II | None = None
@@ -37,13 +37,13 @@ class DiagnosisModel(BaseModel):
     ]
 
 
-class PrescribedMedication(BaseModel):
+class PrescribedMedication(BaseModel, UIMetadataMixin):
     """Секция Назначенного препарата."""
 
     is_nsi: Annotated[
         bool,
         UIFieldMetadata(component="Switch", label="Выбрать из справочника НСИ (СМНН/ЕСКЛП)"),
-    ]
+    ] = False
     # Поле видно только если is_nsi == True
     nsi_code: Annotated[
         CD | None,

@@ -3,12 +3,18 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined, select_autoescape
 from lxml import etree
+from pydantic import BaseModel
 
 
 class CDARenderer:
-    def __init__(self, templates_path: str | Path):
+    def __init__(self, templates_path: str | Path | list[str | Path]):
+        if isinstance(templates_path, str | Path):
+            search_paths = [str(templates_path)]
+        else:
+            search_paths = [str(p) for p in templates_path]
+
         self.env = Environment(
-            loader=FileSystemLoader(str(templates_path)),
+            loader=FileSystemLoader(search_paths),
             autoescape=select_autoescape(["xml"]),
             trim_blocks=True,
             lstrip_blocks=True,
@@ -18,9 +24,15 @@ class CDARenderer:
         self.env.filters["hl7date"] = self._hl7date_filter
         self.env.filters["xml_attr"] = self._xml_attr_filter
 
-    def render(self, template_name: str, data: dict[str, Any]) -> str:
+    def render(self, template_name: str, *data_objects: dict[str, Any] | BaseModel) -> str:
+        render_data = {}
+        for obj in data_objects:
+            if isinstance(obj, BaseModel):
+                render_data.update(obj.model_dump())
+            else:
+                render_data.update(obj)
         template = self.env.get_template(template_name)
-        return template.render(**data)
+        return template.render(**render_data)
 
     def validate_xsd(self, xml_content: str, xsd_path: str | Path) -> tuple[bool, list[str]]:
         """Валидирует XML по XSD схеме. Возвращает (успех, список ошибок)."""

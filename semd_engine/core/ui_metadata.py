@@ -5,7 +5,7 @@ from dataclasses import field as dc_field
 from typing import TYPE_CHECKING, Any, Literal
 
 if TYPE_CHECKING:
-    from pydantic import BaseModel
+    pass
 
 
 @dataclass
@@ -36,21 +36,64 @@ class UIMetadataMixin:
 
     @classmethod
     def get_ui_schema(cls) -> dict[str, Any]:
-        # type hint for pyright
-        if not hasattr(cls, "model_json_schema"):
-            raise TypeError("UIMetadataMixin must be used with Pydantic BaseModel")
+        return get_ui_schema_for_model(cls)
 
-        model_cls: type[BaseModel] = cls  # type: ignore
-        schema = model_cls.model_json_schema()
-        ui_schema = {}
 
-        for name, field in model_cls.model_fields.items():
-            # Ищем UIFieldMetadata в аннотациях (через Annotated)
-            for metadata in field.metadata:
-                if isinstance(metadata, UIFieldMetadata):
-                    # Преобразуем dataclass в словарь, удаляя None
-                    data = asdict(metadata)
-                    ui_schema[name] = {k: v for k, v in data.items() if v is not None}
+def get_ui_schema_for_model(model_cls: Any) -> dict[str, Any]:
+    """Рекурсивно извлекает UI схему для любой Pydantic модели."""
+    from typing import get_args, get_origin
+
+    from pydantic import BaseModel
+
+    if not (isinstance(model_cls, type) and issubclass(model_cls, BaseModel)):
+        return {}
+
+    ui_schema = {}
+    model_json_schema = model_cls.model_json_schema()
+
+    for name, field_info in model_cls.model_fields.items():
+        field_meta = {}
+
+        # 1. Извлекаем метаданные из Annotated
+        for metadata in field_info.metadata:
+            if isinstance(metadata, UIFieldMetadata):
+                data = asdict(metadata)
+                field_meta.update({k: v for k, v in data.items() if v is not None})
+                break
+
+        # 2. Обрабатываем вложенные модели
+        annotation = field_info.annotation
+        origin = get_origin(annotation)
+        args = get_args(annotation)
+
+        target_cls = None
+        if isinstance(annotation, type) and issubclass(annotation, BaseModel):
+            target_cls = annotation
+        elif (
+            origin is list and args and isinstance(args[0], type) and issubclass(args[0], BaseModel)
+        ):
+            target_cls = args[0]
+            field_meta["is_list"] = True
+        elif origin is not None:
+            for arg in args:
+                if isinstance(arg, type) and issubclass(arg, BaseModel):
+                    target_cls = arg
                     break
 
-        return {"title": schema.get("title"), "fields": ui_schema}
+        if target_cls:
+            field_meta["schema"] = get_ui_schema_for_model(target_cls)
+            if name not in ui_schema:
+                ui_schema[name] = field_meta
+        else:
+            # Если метаданных нет, но поле примитивное - добавляем дефолтные
+            if not field_meta:
+                field_meta = {
+                    "component": "TextInput",
+                    "label": name.replace("_", " ").capitalize(),
+                }
+            ui_schema[name] = field_meta
+
+    return {
+        "title": model_json_schema.get("title") or model_cls.__name__,
+        "fields": ui_schema,
+    }
