@@ -1,0 +1,1278 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Схема разработана Управлением актуализации и модернизации руководств по структурированным электронным медицинским документам (СЭМД) 2025 -->
+<!-- Включены элементы разработанные Health Level Seven -->
+<xsd:schema xmlns="urn:hl7-org:v3" xmlns:address="urn:hl7-ru:address" xmlns:fias="urn:hl7-ru:fias" xmlns:identity="urn:hl7-ru:identity" elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="fias.xsd" namespace="urn:hl7-ru:fias" />
+  <xsd:import schemaLocation="address.xsd" namespace="urn:hl7-ru:address" />
+  <xsd:import schemaLocation="identity.xsd" namespace="urn:hl7-ru:identity" />
+  <xsd:include schemaLocation="coreschemas/datatypes.xsd" />
+  <xsd:include schemaLocation="coreschemas/voc.xsd" />
+  <xsd:include schemaLocation="coreschemas/NarrativeBlock.xsd" />
+  <xsd:complexType name="POCD_MT000040.Component2">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="structuredBody" type="structuredBody_247" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="structuredBody_247">
+    <xsd:sequence>
+      <xsd:element minOccurs="2" maxOccurs="28" name="component" type="component_248" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="component_248">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="section" type="section_249" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="section_249">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_250" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="entry" type="entry_251" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="code_250">
+    <xsd:attribute name="code" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="cs">
+          <xsd:enumeration value="DOCINFO" />
+          <xsd:enumeration value="BENEFITS" />
+          <xsd:enumeration value="COMPLNTS" />
+          <xsd:enumeration value="ANAM" />
+          <xsd:enumeration value="LANAM" />
+          <xsd:enumeration value="DISABILITY" />
+          <xsd:enumeration value="SOCANAM" />
+          <xsd:enumeration value="OBSTETRICANAMN" />
+          <xsd:enumeration value="ALL" />
+          <xsd:enumeration value="EPIDEM" />
+          <xsd:enumeration value="RESCONS" />
+          <xsd:enumeration value="CONSILIUMDECISION" />
+          <xsd:enumeration value="COMMISSION" />
+          <xsd:enumeration value="RESLAB" />
+          <xsd:enumeration value="RESINSTR" />
+          <xsd:enumeration value="GISTRESULT" />
+          <xsd:enumeration value="SUR" />
+          <xsd:enumeration value="TRANSFUSINFO" />
+          <xsd:enumeration value="ELSEPROCEDURE" />
+          <xsd:enumeration value="IMM" />
+          <xsd:enumeration value="DRUG" />
+          <xsd:enumeration value="MEDDEVICE" />
+          <xsd:enumeration value="VITALPARAM" />
+          <xsd:enumeration value="SCORES" />
+          <xsd:enumeration value="DGN" />
+          <xsd:enumeration value="REGIME" />
+          <xsd:enumeration value="SERVICES" />
+          <xsd:enumeration value="LINKDOCS" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.197" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.1504.23" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1379" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="entry_251">
+    <xsd:sequence>
+      <xsd:choice minOccurs="1">
+        <xsd:element minOccurs="1" maxOccurs="1" name="act" type="act_821" />
+        <xsd:element minOccurs="1" maxOccurs="1" name="observation" type="observation_252" />
+        <xsd:element minOccurs="1" maxOccurs="1" name="substanceAdministration" type="substanceAdministration_633" />
+      </xsd:choice>
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="observation_252">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="1" name="id" type="id_689" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_253" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="text" type="ED" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="effectiveTime" type="effectiveTime_314" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="value" type="ANY" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="performer" type="performer_418" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="participant" type="participant_392" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="entryRelationship" type="entryRelationship_318" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="referenceRange" type="referenceRange_707" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="ActClassObservation">
+          <xsd:enumeration value="OBS" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="moodCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActMoodDocumentObservation">
+          <xsd:enumeration value="EVN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="code_253">
+    <xsd:sequence minOccurs="0">
+      <xsd:element minOccurs="0" maxOccurs="1" name="originalText" type="ED" />
+    </xsd:sequence>
+    <xsd:attribute name="code" type="cs" use="optional" />
+    <xsd:attribute name="codeSystem" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.166" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.1504.41" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1380" />
+          <xsd:enumeration value="NotFound" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.780" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.941" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1437" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.10043" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1471" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1070" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.473" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1386" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.785" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1078" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.262" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1010" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1514" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="optional" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="optional" />
+    <xsd:attribute name="displayName" type="st" use="optional" />
+    <xsd:attribute name="nullFlavor" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="NullFlavor">
+          <xsd:enumeration value="NI" />
+          <xsd:enumeration value="OTH" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="effectiveTime_314">
+    <xsd:sequence minOccurs="0">
+      <xsd:element minOccurs="0" maxOccurs="1" name="low" type="low_315" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="high" type="high_316" />
+    </xsd:sequence>
+    <xsd:attribute name="value" type="ts" use="optional" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="low_315">
+    <xsd:attribute name="value" type="ts" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="high_316">
+    <xsd:attribute name="value" type="ts" use="optional" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="entryRelationship_318">
+    <xsd:sequence>
+      <xsd:choice minOccurs="1">
+        <xsd:element minOccurs="1" maxOccurs="1" name="act" type="act_430" />
+        <xsd:element minOccurs="1" maxOccurs="1" name="observation" type="observation_319" />
+        <xsd:element minOccurs="1" maxOccurs="1" name="substanceAdministration" type="substanceAdministration_567" />
+      </xsd:choice>
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="typeCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActRelationshipEntryRelationship">
+          <xsd:enumeration value="COMP" />
+          <xsd:enumeration value="MFST" />
+          <xsd:enumeration value="REFR" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="inversionInd" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="bl">
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="observation_319">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_320" />
+      <xsd:choice minOccurs="0">
+        <xsd:element minOccurs="0" maxOccurs="1" name="text" type="ED" />
+        <xsd:element minOccurs="1" maxOccurs="1" name="effectiveTime" type="effectiveTime_738" />
+      </xsd:choice>
+      <xsd:element minOccurs="1" maxOccurs="1" name="value" type="ANY" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="entryRelationship" type="entryRelationship_327" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="ActClassObservation">
+          <xsd:enumeration value="OBS" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="moodCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActMoodDocumentObservation">
+          <xsd:enumeration value="EVN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="code_320">
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.166" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.1504.41" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1380" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1077" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.1504.4" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="entryRelationship_327">
+    <xsd:sequence>
+      <xsd:choice minOccurs="1">
+        <xsd:element minOccurs="1" maxOccurs="1" name="act" type="act_741" />
+        <xsd:element minOccurs="1" maxOccurs="1" name="observation" type="observation_328" />
+      </xsd:choice>
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="typeCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActRelationshipEntryRelationship">
+          <xsd:enumeration value="COMP" />
+          <xsd:enumeration value="REFR" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="inversionInd" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="bl">
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="observation_328">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_329" />
+      <xsd:choice minOccurs="0">
+        <xsd:element minOccurs="0" maxOccurs="1" name="text" type="ED" />
+        <xsd:element minOccurs="0" maxOccurs="1" name="effectiveTime" type="effectiveTime_781" />
+      </xsd:choice>
+      <xsd:element minOccurs="0" maxOccurs="1" name="value" type="ANY" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="entryRelationship" type="entryRelationship_783" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="referenceRange" type="referenceRange_504" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="ActClassObservation">
+          <xsd:enumeration value="OBS" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="moodCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActMoodDocumentObservation">
+          <xsd:enumeration value="EVN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="code_329">
+    <xsd:attribute name="code" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="cs">
+          <xsd:enumeration value="8041" />
+          <xsd:enumeration value="8102" />
+          <xsd:enumeration value="7026" />
+          <xsd:enumeration value="12014" />
+          <xsd:enumeration value="823" />
+          <xsd:enumeration value="824" />
+          <xsd:enumeration value="12120" />
+          <xsd:enumeration value="8004" />
+          <xsd:enumeration value="8045" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.166" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.1504.41" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1380" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="translation_339">
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1358" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1031" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="participant_392">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="participantRole" type="participantRole_393" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="typeCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="ParticipationType">
+          <xsd:enumeration value="IND" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="participantRole_393">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="playingEntity" type="playingEntity_394" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" type="RoleClassRoot" use="required" />
+  </xsd:complexType>
+  <xsd:complexType name="playingEntity_394">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_395" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="desc" type="ED" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" type="EntityClassRoot" use="required" />
+    <xsd:attribute name="determinerCode" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="EntityDeterminer">
+          <xsd:enumeration value="INSTANCE" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="code_395">
+    <xsd:attribute name="code" type="cs" use="optional" />
+    <xsd:attribute name="codeSystem" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1367" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.644" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="optional" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="optional" />
+    <xsd:attribute name="displayName" type="st" use="optional" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="performer_418">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="1" name="modeCode" type="modeCode_419" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="assignedEntity" type="assignedEntity_420" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="modeCode_419">
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.368" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.734" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="assignedEntity_420">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="id" type="id_421" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="code" type="code_422" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="telecom" type="telecom_423" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="assignedPerson" type="assignedPerson_424" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="id_421">
+    <xsd:attribute name="root" type="uid" use="optional" />
+    <xsd:attribute name="extension" type="st" use="optional" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="code_422">
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1002" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.733" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="telecom_423">
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="value" type="url" use="required" />
+    <xsd:attribute name="use" type="set_TelecommunicationAddressUse" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="assignedPerson_424">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="name" type="name_425" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="name_425">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="family" type="st" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="given" type="st" />
+      <xsd:element minOccurs="0" maxOccurs="1" ref="identity:Patronymic" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="act_430">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="id" type="id_431" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_432" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActClassDocumentEntryAct">
+          <xsd:enumeration value="ACT" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="moodCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_DocumentActMood">
+          <xsd:enumeration value="EVN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="id_431">
+    <xsd:attribute name="root" type="uid" use="required" />
+    <xsd:attribute name="extension" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="code_432">
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.197" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.1504.23" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1379" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="referenceRange_504">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="observationRange" type="observationRange_505" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="observationRange_505">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="text" type="ST" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="substanceAdministration_567">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="consumable" type="consumable_568" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="ActClass">
+          <xsd:enumeration value="SBADM" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="moodCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_DocumentSubstanceMood">
+          <xsd:enumeration value="EVN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="consumable_568">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="manufacturedProduct" type="manufacturedProduct_569" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="typeCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="ParticipationType">
+          <xsd:enumeration value="CSM" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="manufacturedProduct_569">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="manufacturedLabeledDrug" type="manufacturedLabeledDrug_570" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="RoleClassManufacturedProduct">
+          <xsd:enumeration value="MANU" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="manufacturedLabeledDrug_570">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_571" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="code_571">
+    <xsd:sequence minOccurs="0">
+      <xsd:element minOccurs="0" maxOccurs="1" name="originalText" type="ED" />
+    </xsd:sequence>
+    <xsd:attribute name="code" type="cs" use="optional" />
+    <xsd:attribute name="codeSystem" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1033" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="optional" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="optional" />
+    <xsd:attribute name="displayName" type="st" use="optional" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="substanceAdministration_633">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="id" type="id_634" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_635" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="text" type="ED" />
+      <xsd:element minOccurs="2" maxOccurs="2" name="effectiveTime" type="SXCM_TS" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="routeCode" type="routeCode_645" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="doseQuantity" type="doseQuantity_646" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="administrationUnitCode"  />
+      <xsd:element minOccurs="1" maxOccurs="1" name="consumable" type="consumable_649" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="entryRelationship" type="entryRelationship_655" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="precondition" type="precondition_659" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="ActClass">
+          <xsd:enumeration value="SBADM" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="moodCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_DocumentSubstanceMood">
+          <xsd:enumeration value="EVN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="id_634">
+    <xsd:attribute name="root" type="uid" use="required" />
+    <xsd:attribute name="extension" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="code_635">
+    <xsd:attribute name="codeSystemName" type="st" use="optional" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="optional" />
+    <xsd:attribute name="displayName" type="st" use="optional" />
+    <xsd:attribute name="nullFlavor" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="NullFlavor">
+          <xsd:enumeration value="NI" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="width_638">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="translation" type="translation_639" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="unit" type="cs" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="translation_639">
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1358" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1031" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="period_643">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="translation" type="translation_644" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="unit" type="cs" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="translation_644">
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1358" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1031" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="routeCode_645">
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1468" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="doseQuantity_646">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="1" name="translation" type="translation_647" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="unit" type="cs" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="translation_647">
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1358" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1031" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="consumable_649">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="manufacturedProduct" type="manufacturedProduct_650" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="typeCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="ParticipationType">
+          <xsd:enumeration value="CSM" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="manufacturedProduct_650">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="manufacturedMaterial" type="manufacturedMaterial_651" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="RoleClassManufacturedProduct">
+          <xsd:enumeration value="MANU" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="manufacturedMaterial_651">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_652" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="name" type="ST" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="EntityClassManufacturedMaterial">
+          <xsd:enumeration value="MMAT" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="determinerCode" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="EntityDeterminerDetermined"> 
+          <xsd:enumeration value="KIND" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="code_652">
+    <xsd:sequence minOccurs="0">
+      <xsd:element minOccurs="0" maxOccurs="1" name="translation" type="translation_653" />
+    </xsd:sequence>
+    <xsd:attribute name="code" type="cs" use="optional" />
+    <xsd:attribute name="codeSystem" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.611" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="optional" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="optional" />
+    <xsd:attribute name="displayName" type="st" use="optional" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="translation_653">
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1367" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.644" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="entryRelationship_655">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="act" type="act_656" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="typeCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActRelationshipEntryRelationship">
+          <xsd:enumeration value="REFR" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="inversionInd" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="bl">
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="act_656">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="id" type="id_657" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_658" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActClassDocumentEntryAct">
+          <xsd:enumeration value="ACT" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="moodCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_DocumentActMood">
+          <xsd:enumeration value="EVN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="id_657">
+    <xsd:attribute name="root" type="uid" use="required" />
+    <xsd:attribute name="extension" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="code_658">
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.197" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.1504.23" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1379" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="precondition_659">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="criterion" type="criterion_660" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="typeCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="ActRelationshipType">
+          <xsd:enumeration value="PRCN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="criterion_660">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_661" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="value" type="ANY" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="code_661">
+    <xsd:attribute name="code" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="cs">
+          <xsd:enumeration value="ASSERTION" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystem" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="2.16.840.1.113883.5.4" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="optional" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="optional" />
+    <xsd:attribute name="displayName" type="st" use="optional" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="id_689">
+    <xsd:attribute name="root" type="uid" use="required" />
+    <xsd:attribute name="extension" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="low_695">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="translation" type="translation_696" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="unit" type="cs" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="translation_696">
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1358" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1031" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="high_697">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="translation" type="translation_698" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="unit" type="cs" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="translation_698">
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1358" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1031" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="referenceRange_707">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="observationRange" type="observationRange_708" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="observationRange_708">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="value" type="ANY" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="low_711">
+    <xsd:sequence minOccurs="0">
+      <xsd:element minOccurs="1" maxOccurs="1" name="translation" type="translation_712" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="optional" />
+    <xsd:attribute name="value" type="real" use="optional" />
+    <xsd:attribute name="unit" type="cs" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="translation_712">
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1358" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1031" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="high_713">
+    <xsd:sequence minOccurs="0">
+      <xsd:element minOccurs="1" maxOccurs="1" name="translation" type="translation_714" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="optional" />
+    <xsd:attribute name="value" type="real" use="optional" />
+    <xsd:attribute name="unit" type="cs" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="translation_714">
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1358" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1031" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="effectiveTime_738">
+    <xsd:attribute name="value" type="ts" use="optional" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="act_741">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="id" type="id_742" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_743" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActClassDocumentEntryAct">
+          <xsd:enumeration value="ACT" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="moodCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_DocumentActMood">
+          <xsd:enumeration value="EVN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="id_742">
+    <xsd:attribute name="root" type="uid" use="required" />
+    <xsd:attribute name="extension" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="code_743">
+    <xsd:attribute name="code" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="cs">
+          <xsd:enumeration value="VITALPARAM" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystem" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.197" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.1504.23" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1379" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="optional" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="optional" />
+    <xsd:attribute name="displayName" type="st" use="optional" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="effectiveTime_781">
+    <xsd:attribute name="value" type="ts" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="entryRelationship_783">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="observation" type="observation_784" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="typeCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActRelationshipEntryRelationship">
+          <xsd:enumeration value="COMP" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="observation_784">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_785" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="value" type="ANY" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="ActClassObservation">
+          <xsd:enumeration value="OBS" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="moodCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActMoodDocumentObservation">
+          <xsd:enumeration value="EVN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="code_785">
+    <xsd:attribute name="code" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="cs">
+          <xsd:enumeration value="12393" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.166" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.1504.41" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1380" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="translation_791">
+    <xsd:attribute name="value" type="real" use="required" />
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1358" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1031" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="act_821">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="id" type="id_822" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_823" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="text" type="ED" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="effectiveTime" type="effectiveTime_825" />
+      <xsd:element minOccurs="0" maxOccurs="3" name="entryRelationship" type="entryRelationship_826" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="reference" type="reference_838" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActClassDocumentEntryAct">
+          <xsd:enumeration value="ACT" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="moodCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_DocumentActMood">
+          <xsd:enumeration value="EVN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="id_822">
+    <xsd:attribute name="root" type="uid" use="required" />
+    <xsd:attribute name="extension" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="code_823">
+    <xsd:attribute name="code" type="cs" use="required" />
+    <xsd:attribute name="codeSystem" type="uid" use="required" />
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="effectiveTime_825">
+    <xsd:attribute name="value" type="ts" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="entryRelationship_826">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="observation" type="observation_827" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="typeCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActRelationshipEntryRelationship">
+          <xsd:enumeration value="COMP" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="observation_827">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="code" type="code_828" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="value" type="ANY" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="ActClassObservation">
+          <xsd:enumeration value="OBS" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="moodCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActMoodDocumentObservation">
+          <xsd:enumeration value="EVN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="code_828">
+    <xsd:attribute name="code" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="cs">
+          <xsd:enumeration value="11002" />
+          <xsd:enumeration value="11003" />
+          <xsd:enumeration value="6058" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystem" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="uid">
+          <xsd:enumeration value="1.2.643.5.1.13.13.99.2.166" />
+          <xsd:enumeration value="1.2.643.5.1.13.2.1.1.1504.41" />
+          <xsd:enumeration value="1.2.643.5.1.13.13.11.1380" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="codeSystemName" type="st" use="required" />
+    <xsd:attribute name="codeSystemVersion" type="st" use="required" />
+    <xsd:attribute name="displayName" type="st" use="required" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+  </xsd:complexType>
+  <xsd:complexType name="reference_838">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="externalDocument" type="externalDocument_839" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="typeCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="x_ActRelationshipExternalReference">
+          <xsd:enumeration value="REFR" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="externalDocument_839">
+    <xsd:sequence>
+      <xsd:element minOccurs="2" maxOccurs="2" name="id" type="id_840" />
+    </xsd:sequence>
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="prohibited" />
+    <xsd:attribute name="classCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="ActClassDocument">
+          <xsd:enumeration value="DOCCLIN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="moodCode" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="ActMood">
+          <xsd:enumeration value="EVN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="id_840">
+    <xsd:attribute name="root" type="uid" use="optional" />
+    <xsd:attribute name="extension" type="st" use="optional" />
+    <xsd:attribute name="nullFlavor" type="NullFlavor" use="optional" />
+  </xsd:complexType>
+</xsd:schema>

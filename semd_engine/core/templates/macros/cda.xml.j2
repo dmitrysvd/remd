@@ -1,0 +1,40 @@
+{% macro id(ii) -%}
+<id root="{{ ii.root }}"{{ ii.extension | xml_attr('extension') }}{{ ii.assigningAuthorityName | xml_attr('assigningAuthorityName') }}/>
+{%- endmacro %}
+
+{% macro code(cd, tag='code') -%}
+<{{ tag }} code="{{ cd.code }}" codeSystem="{{ cd.codeSystem }}" 
+    {{ cd.codeSystemName | xml_attr('codeSystemName') }} 
+    {{ cd.displayName | xml_attr('displayName') }}>
+{%- endmacro %}
+
+
+{% macro code(cd, tag='code') -%}
+<{{ tag }} code="{{ cd.code }}" codeSystem="{{ cd.codeSystem }}" 
+    {{ cd.codeSystemName | xml_attr('codeSystemName') }} 
+    {{ cd.displayName | xml_attr('displayName') }}>
+    {% if cd.originalText %}<originalText>{{ cd.originalText }}</originalText>{% endif %}
+</{{ tag }}>
+{%- endmacro %}
+
+{% macro addr(a) -%}
+<addr>
+    <streetAddressLine>{{ a.text }}</streetAddressLine>
+    {% if a.state %}<state>{{ a.state }}</state>{% endif %}
+    {% if a.city %}<city>{{ a.city }}</city>{% endif %}
+    {% if a.street %}<street>{{ a.street }}</street>{% endif %}
+    {% if a.house %}<house>{{ a.house }}</house>{% endif %}
+    {% if a.postalCode %}<postalCode>{{ a.postalCode }}</postalCode>{% endif %}
+    {% if a.fias_guid %}
+    <additionalLocator>{{ a.fias_guid }}</additionalLocator>
+    {% endif %}
+</addr>
+{%- endmacro %}
+
+{% macro person(p) -%}
+<name>
+    <family>{{ p.family }}</family>
+    <given>{{ p.given }}</given>
+    {% if p.patronymic %}<identity>{{ p.patronymic }}</identity>{% endif %}
+</name>
+{%- endmacro %}
