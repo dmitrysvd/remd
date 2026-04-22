@@ -1,9 +1,0 @@
-============================= test session starts ==============================
-platform linux -- Python 3.14.2, pytest-9.0.3, pluggy-1.6.0
-rootdir: /home/dmitry/projects/remd
-configfile: pyproject.toml
-collected 3 items
-
-tests/test_validation.py ...                                             [100%]
-
-============================== 3 passed in 7.27s ===============================
