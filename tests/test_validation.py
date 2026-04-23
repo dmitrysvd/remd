@@ -254,6 +254,16 @@ def full_render_data():
                 "low": "2026-04-21",
             }
         ],
+        "incapacity": {
+            "reason": {
+                "code": "1",
+                "codeSystem": "1.2.643.5.1.13.13.11.1044",
+                "codeSystemName": "Причины выдачи документа о временной нетрудоспособности",
+                "displayName": "Заболевание",
+                "codeSystemVersion": "4.2",
+            },
+            "period": {"low": "2026-04-21", "high": "2026-04-23"},
+        },
     }
 
 

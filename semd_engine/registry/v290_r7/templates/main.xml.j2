@@ -262,6 +262,7 @@
                 </section>
             </component>
             {% endif %}
+            {% if incapacity %}
             <component>
                 <section>
                     <code code="SOCANAM" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Социальный анамнез" codeSystemVersion="1.38"/>
@@ -269,14 +270,15 @@
                         <observation classCode="OBS" moodCode="EVN">
                             <code code="12006" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Причина нетрудоспособности" codeSystemVersion="5.69"/>
                             <effectiveTime>
-                                <low value="{{ event.period.low | hl7date }}"/>
-                                <high value="{{ event.period.low | hl7date }}"/>
+                                <low value="{{ incapacity.period.low | hl7date }}"/>
+                                <high value="{{ (incapacity.period.high or incapacity.period.low) | hl7date }}"/>
                             </effectiveTime>
-                            <value xsi:type="CD" code="1" codeSystem="1.2.643.5.1.13.13.11.1044" codeSystemName="Причины выдачи документа о временной нетрудоспособности" displayName="Заболевание" codeSystemVersion="4.2"/>
+                            {{ cda.code(incapacity.reason, tag='value', extra_attrs=' xsi:type="CD"') }}
                         </observation>
                     </entry>
                 </section>
             </component>
+            {% endif %}
             {% if vital_params %}
             <component>
                 <section>

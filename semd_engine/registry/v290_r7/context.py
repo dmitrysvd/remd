@@ -47,6 +47,11 @@ class BenefitModel(BaseModel):
     code: CDWithVersion
 
 
+class IncapacityModel(BaseModel):
+    reason: CDWithVersion
+    period: Period
+
+
 class InsurancePolicyModel(BaseModel):
     type: CDWithVersion
     number: str
@@ -122,6 +127,7 @@ class ConsultationProtocolV7RenderContext(ConsultationProtocolV7):
 
     disabilities: list[DisabilityModel] = Field(default_factory=list)
     benefits: list[BenefitModel] = Field(default_factory=list)
+    incapacity: IncapacityModel | None = None
 
     # Переопределяем поля из базовой модели, если нужно,
     # но ConsultationProtocolV7 уже содержит всё необходимое для payload.
