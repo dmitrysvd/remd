@@ -42,12 +42,16 @@
             {% if patient.insurance_policy %}
             <identity:InsurancePolicy>
                 <identity:InsurancePolicyType code="{{ patient.insurance_policy.type.code }}" 
-                                              codeSystem="{{ patient.insurance_policy.type.codeSystem }}" 
-                                              codeSystemName="{{ patient.insurance_policy.type.codeSystemName }}" 
-                                              displayName="{{ patient.insurance_policy.type.displayName }}" 
-                                              codeSystemVersion="{{ patient.insurance_policy.type.version }}"/>
+                                             codeSystem="1.2.643.5.1.13.13.11.1035" 
+                                             codeSystemName="Виды полиса обязательного медицинского страхования" 
+                                             displayName="{{ patient.insurance_policy.type.displayName }}" 
+                                             codeSystemVersion="{{ patient.insurance_policy.type.version or '1.3' }}"/>
+                {% if patient.insurance_policy.series %}
+                <identity:Series>{{ patient.insurance_policy.series }}</identity:Series>
+                {% endif %}
                 <identity:Number>{{ patient.insurance_policy.number }}</identity:Number>
             </identity:InsurancePolicy>
+
             {% endif %}
             {{ cda.addr(patient.address) }}
             <telecom use="WP" value="{{ patient.contacts.phone }}"/>
@@ -59,6 +63,10 @@
             </patient>
             <providerOrganization>
                 <id root="{{ organization.id }}"/>
+                {% if organization.license %}
+                <id root="1.2.643.5.1.13.2.1.1.1504.101" extension="{{ organization.license.extension }}"
+                    assigningAuthorityName="{{ organization.license.assigningAuthorityName or 'Минздрав' }}"/>
+                {% endif %}
                 <identity:Props>
                     <identity:Ogrn>{{ organization.ogrn }}</identity:Ogrn>
                     <identity:Okpo>{{ organization.okpo }}</identity:Okpo>
@@ -118,6 +126,16 @@
                 <low value="{{ event.period.low | hl7date }}"/>
                 <high value="{{ event.period.high | hl7date }}"/>
             </effectiveTime>
+            {% if event.service_form %}
+            <medService:serviceForm codeSystem="1.2.643.5.1.13.13.11.1551" codeSystemName="Формы оказания медицинской помощи" 
+                                   code="{{ event.service_form.code }}" displayName="{{ event.service_form.displayName }}" 
+                                   codeSystemVersion="{{ event.service_form.version or '1.2' }}"/>
+            {% endif %}
+            {% if event.service_type %}
+            <medService:serviceType codeSystem="1.2.643.5.1.13.13.11.1034" codeSystemName="Виды медицинской помощи" 
+                                   code="{{ event.service_type.code }}" displayName="{{ event.service_type.displayName }}" 
+                                   codeSystemVersion="{{ event.service_type.version or '1.3' }}"/>
+            {% endif %}
             {% if event.conditions %}
             <medService:serviceCond codeSystem="1.2.643.5.1.13.13.99.2.322" codeSystemName="Условия оказания медицинской помощи" 
                                    code="{{ event.conditions.code }}" displayName="{{ event.conditions.displayName }}" 

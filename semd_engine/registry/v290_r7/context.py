@@ -54,6 +54,7 @@ class IncapacityModel(BaseModel):
 
 class InsurancePolicyModel(BaseModel):
     type: CDWithVersion
+    series: str | None = None
     number: str
 
 
@@ -77,6 +78,7 @@ class OrganizationModel(BaseModel):
     name: str
     phone: str
     address: ADDRWithVersion
+    license: II | None = None
 
 
 class AuthorModel(BaseModel):
@@ -99,6 +101,8 @@ class EventModel(BaseModel):
     type: CDWithVersion
     period: Period
     conditions: CDWithVersion | None = None
+    service_form: CDWithVersion | None = None
+    service_type: CDWithVersion | None = None
 
 
 class EncounterModel(BaseModel):
@@ -131,3 +135,6 @@ class ConsultationProtocolV7RenderContext(ConsultationProtocolV7):
 
     # Переопределяем поля из базовой модели, если нужно,
     # но ConsultationProtocolV7 уже содержит всё необходимое для payload.
+
+
+ConsultationProtocolV7RenderContext.model_rebuild()

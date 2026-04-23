@@ -88,6 +88,7 @@ def full_render_data():
                     "displayName": "Полис ОМС старого образца",
                     "version": "1.3",
                 },
+                "series": "МЮ",
                 "number": "1344600",
             },
             "name": {"family": "Сельченков", "given": "Михаил", "patronymic": "Владимирович"},
@@ -125,6 +126,10 @@ def full_render_data():
                     "aoguid": "212d3123-9c4d-4579-b31a-b5c6e9632b04",
                     "houseguid": "e59f1e55-75c8-4037-9615-ed7ce751b745",
                 },
+            },
+            "license": {
+                "root": "1.2.643.5.1.13.13.12.2.77.7831.1.1.1",
+                "extension": "ЛО-77-01-000000",
             },
         },
         "author": {
@@ -166,6 +171,12 @@ def full_render_data():
             "type": {"code": "1", "displayName": "Консультация", "version": "3.50"},
             "period": {"low": "2026-04-21 14:00:00", "high": "2026-04-21 14:15:00"},
             "conditions": {"code": "2", "displayName": "Амбулаторно", "version": "3.1"},
+            "service_form": {"code": "3", "displayName": "Плановая", "version": "1.2"},
+            "service_type": {
+                "code": "1",
+                "displayName": "Первичная медико-санитарная помощь",
+                "version": "1.3",
+            },
         },
         "encounter": {
             "period": {"low": "2026-04-21 14:00:00", "high": "2026-04-21 14:00:00"},
@@ -302,6 +313,23 @@ def test_full_v290_r7_generation_and_validation(renderer, full_render_data, xsd_
     # Schematron Validation
     success_sch, errors_sch = renderer.validate_schematron(xml_output, sch_path)
     assert success_sch, f"Schematron validation failed: {errors_sch}"
+
+    # Verify new fields presence in XML
+    assert "Тестовый анамнез жизни" in xml_output
+    assert 'code="K29.5"' in xml_output
+    assert "Основной диагноз" in xml_output
+    assert 'code="1" codeSystem="1.2.643.5.1.13.13.11.1049"' in xml_output  # disease_character
+    assert 'code="6" codeSystem="1.2.643.5.1.13.13.99.2.262"' in xml_output  # vital param
+    assert 'code="3" codeSystem="1.2.643.5.1.13.13.11.1053"' in xml_output  # disability
+    assert 'code="1.00000.0216" codeSystem="1.2.643.5.1.13.13.99.2.541"' in xml_output  # benefit
+    assert 'code="1" codeSystem="1.2.643.5.1.13.13.11.1044"' in xml_output  # incapacity reason
+
+    # M6 Verify
+    assert "<identity:Series>МЮ</identity:Series>" in xml_output
+    assert 'root="1.2.643.5.1.13.2.1.1.1504.101" extension="ЛО-77-01-000000"' in xml_output
+    assert 'codeSystem="1.2.643.5.1.13.13.11.1551"' in xml_output  # service form
+    assert 'code="3"' in xml_output  # service form code
+    assert 'codeSystem="1.2.643.5.1.13.13.11.1034"' in xml_output  # service type
 
     # Check if files exist
     assert xsd_path.exists(), f"XSD path {xsd_path} does not exist"
