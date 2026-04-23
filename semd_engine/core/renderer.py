@@ -23,16 +23,35 @@ class CDARenderer:
         # Добавляем полезные фильтры
         self.env.filters["hl7date"] = self._hl7date_filter
         self.env.filters["xml_attr"] = self._xml_attr_filter
+        self._context_models: dict[str, type[BaseModel]] = {}
+
+    def register_context_model(self, template_name: str, model_class: type[BaseModel]):
+        """Регистрирует Pydantic-модель для нормализации контекста конкретного шаблона."""
+        self._context_models[template_name] = model_class
 
     def render(self, template_name: str, *data_objects: dict[str, Any] | BaseModel) -> str:
-        render_data = {}
+        # 1. Собираем сырой словарь
+        raw_data = {}
         for obj in data_objects:
             if isinstance(obj, BaseModel):
-                render_data.update(obj.model_dump())
+                raw_data.update(obj.model_dump())
             else:
-                render_data.update(obj)
+                raw_data.update(obj)
+
+        # 2. Нормализуем через модель (обязательно)
+        if template_name not in self._context_models:
+            raise ValueError(f"No context model registered for template: {template_name}")
+
+        model_class = self._context_models[template_name]
+        render_context = model_class.model_validate(raw_data)
+
+        # Передаем поля модели как kwargs, сохраняя объекты для атрибутного доступа в шаблоне
+        context_dict = {
+            k: getattr(render_context, k) for k in render_context.__class__.model_fields.keys()
+        }
+
         template = self.env.get_template(template_name)
-        return template.render(**render_data)
+        return template.render(**context_dict)
 
     def validate_xsd(self, xml_content: str, xsd_path: str | Path) -> tuple[bool, list[str]]:
         """Валидирует XML по XSD схеме. Возвращает (успех, список ошибок)."""

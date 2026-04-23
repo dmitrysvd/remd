@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from semd_engine.core.renderer import CDARenderer
+from semd_engine.registry.v290_r7.context import ConsultationProtocolV7RenderContext
 from semd_engine.registry.v290_r7.schema import ConsultationProtocolV7
 
 app = FastAPI()
@@ -20,6 +21,7 @@ renderer = CDARenderer(
         "semd_engine/core/templates",
     ]
 )
+renderer.register_context_model("main.xml.j2", ConsultationProtocolV7RenderContext)
 
 # Мок данных заголовка (в реальной системе придет из БД/интеграций)
 HEADER_MOCK = {

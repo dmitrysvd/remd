@@ -8,9 +8,11 @@
     <code code="{{ header.type_code.code }}" codeSystem="{{ header.type_code.codeSystem }}" 
           codeSystemName="{{ header.type_code.codeSystemName }}" codeSystemVersion="{{ header.type_code.codeSystemVersion }}" 
           displayName="{{ header.type_code.displayName }}">
+        {% if header.type_code.translation %}
         <translation code="{{ header.type_code.translation.code }}" codeSystem="{{ header.type_code.translation.codeSystem }}" 
                      codeSystemName="{{ header.type_code.translation.codeSystemName }}" codeSystemVersion="{{ header.type_code.translation.codeSystemVersion }}" 
                      displayName="{{ header.type_code.translation.displayName }}"/>
+        {% endif %}
     </code>
     <title>{{ header.title }}</title>
     <effectiveTime value="{{ event.period.low | hl7date }}"/>
@@ -111,15 +113,15 @@
 
     <documentationOf>
         <serviceEvent>
-            <code code="{{ event.type.code }}" codeSystem="1.2.643.5.1.13.13.99.2.726" codeSystemName="Типы документированных событий" displayName="{{ event.type.displayName }}" codeSystemVersion="{{ event.type.get('version') or '3.50' }}"/>
+            <code code="{{ event.type.code }}" codeSystem="1.2.643.5.1.13.13.99.2.726" codeSystemName="Типы документированных событий" displayName="{{ event.type.displayName }}" codeSystemVersion="{{ event.type.version or '3.50' }}"/>
             <effectiveTime>
                 <low value="{{ event.period.low | hl7date }}"/>
                 <high value="{{ event.period.high | hl7date }}"/>
             </effectiveTime>
-            {% if event.get('conditions') %}
+            {% if event.conditions %}
             <medService:serviceCond codeSystem="1.2.643.5.1.13.13.99.2.322" codeSystemName="Условия оказания медицинской помощи" 
                                    code="{{ event.conditions.code }}" displayName="{{ event.conditions.displayName }}" 
-                                   codeSystemVersion="{{ event.conditions.get('version') or '3.1' }}"/>
+                                   codeSystemVersion="{{ event.conditions.version or '3.1' }}"/>
             {% endif %}
         </serviceEvent>
     </documentationOf>
@@ -148,7 +150,7 @@
                                    codeSystem="1.2.643.5.1.13.13.11.1007" 
                                    codeSystemName="Вид случая госпитализации или обращения (первичный, повторный)" 
                                    displayName="{{ document_info.case_type.displayName }}" 
-                                   codeSystemVersion="{{ document_info.case_type.get('version') or '2.1' }}"/>
+                                   codeSystemVersion="{{ document_info.case_type.version or '2.1' }}"/>
                         </observation>
                     </entry>
                     <entry>
@@ -164,7 +166,7 @@
                                    codeSystem="1.2.643.5.1.13.13.11.1006" 
                                    codeSystemName="Степень тяжести состояния пациента" 
                                    displayName="{{ document_info.patient_condition.displayName }}" 
-                                   codeSystemVersion="{{ document_info.patient_condition.get('version') or '2.4' }}"/>
+                                   codeSystemVersion="{{ document_info.patient_condition.version or '2.4' }}"/>
                         </observation>
                     </entry>
                     <entry>

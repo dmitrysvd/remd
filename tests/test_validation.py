@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 
 from semd_engine.core.renderer import CDARenderer
+from semd_engine.registry.v290_r7.context import ConsultationProtocolV7RenderContext
 
 
 @pytest.fixture
@@ -12,6 +13,7 @@ def renderer():
 
     if isinstance(r.env.loader, FileSystemLoader):
         r.env.loader.searchpath.append("semd_engine/core/templates")
+    r.register_context_model("main.xml.j2", ConsultationProtocolV7RenderContext)
     return r
 
 
@@ -33,6 +35,7 @@ def sch_path():
 @pytest.fixture
 def full_render_data():
     return {
+        "event_date": "2026-04-21 14:00:00",
         "header": {
             "id": {"root": "1.2.643.5.1.13.13.12.2.77.7831.100.1.1.51", "extension": "144632"},
             "type_code": {

@@ -1,29 +1,29 @@
 {% macro id(ii) -%}
-<id root="{{ ii.root }}"{{ ii.get('extension') | xml_attr('extension') }}/>
+<id root="{{ ii.root }}"{{ ii.extension | xml_attr('extension') }}/>
 {%- endmacro %}
 
 {% macro code(cd, tag='code') -%}
-<{{ tag }} code="{{ cd.code }}" codeSystem="{{ cd.codeSystem }}" codeSystemName="{{ cd.codeSystemName }}" codeSystemVersion="{{ cd.codeSystemVersion }}" displayName="{{ cd.displayName }}">{% if cd.get('originalText') %}<originalText>{{ cd.originalText }}</originalText>{% endif %}</{{ tag }}>
+<{{ tag }} code="{{ cd.code }}" codeSystem="{{ cd.codeSystem }}" codeSystemName="{{ cd.codeSystemName }}" codeSystemVersion="{{ cd.codeSystemVersion }}" displayName="{{ cd.displayName }}">{% if cd.originalText %}<originalText>{{ cd.originalText }}</originalText>{% endif %}</{{ tag }}>
 {%- endmacro %}
 
 {% macro addr(a) -%}
 <addr>
-    {% if a.get('type') %}
+    {% if a.type %}
     <address:Type code="{{ a.type.code }}" codeSystem="1.2.643.5.1.13.13.11.1504" 
                   codeSystemName="Тип адреса пациента" displayName="{{ a.type.displayName }}" 
-                  codeSystemVersion="{{ a.type.get('version') or '1.4' }}"/>
+                  codeSystemVersion="{{ a.type.version or '1.4' }}"/>
     {% endif %}
     <streetAddressLine>{{ a.text }}</streetAddressLine>
-    {% if a.get('state_code') %}
+    {% if a.state_code %}
     <address:stateCode code="{{ a.state_code.code }}" codeSystem="1.2.643.5.1.13.13.99.2.206" 
                        codeSystemName="Субъекты Российской Федерации" displayName="{{ a.state_code.displayName }}" 
-                       codeSystemVersion="{{ a.state_code.get('version') or '6.5' }}"/>
+                       codeSystemVersion="{{ a.state_code.version or '6.5' }}"/>
     {% endif %}
-    <postalCode>{{ a.get('postal_code') or '101000' }}</postalCode>
-    {% if a.get('fias') %}
+    <postalCode>{{ a.postal_code or '101000' }}</postalCode>
+    {% if a.fias %}
     <fias:Address>
         <fias:AOGUID>{{ a.fias.aoguid }}</fias:AOGUID>
-        {% if a.fias.get('houseguid') %}<fias:HOUSEGUID>{{ a.fias.houseguid }}</fias:HOUSEGUID>{% endif %}
+        {% if a.fias.houseguid %}<fias:HOUSEGUID>{{ a.fias.houseguid }}</fias:HOUSEGUID>{% endif %}
     </fias:Address>
     {% endif %}
 </addr>
@@ -33,6 +33,6 @@
 <name>
     <family>{{ p.family }}</family>
     <given>{{ p.given }}</given>
-    {% if p.get('patronymic') %}<identity:Patronymic>{{ p.patronymic }}</identity:Patronymic>{% endif %}
+    {% if p.patronymic %}<identity:Patronymic>{{ p.patronymic }}</identity:Patronymic>{% endif %}
 </name>
 {%- endmacro %}

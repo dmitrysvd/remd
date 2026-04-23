@@ -15,7 +15,7 @@ class CD(BaseModel):
     """Concept Descriptor (Код из справочника)."""
 
     code: str
-    codeSystem: str
+    codeSystem: str | None = None
     codeSystemName: str | None = None
     codeSystemVersion: str | None = None
     displayName: str | None = None
@@ -39,6 +39,12 @@ class ADDR(BaseModel):
     flat: str | None = None
     fias_guid: str | None = Field(None, alias="a_guid")
     text: str
+
+    # Доп поля для макроса addr
+    type: CD | None = None
+    state_code: CD | None = None
+    postal_code: str | None = None
+    fias: dict[str, str] | None = None
 
 
 class PN(BaseModel):
