@@ -5,7 +5,8 @@ from semd_engine.registry.v290_r7.schema import ConsultationProtocolV7, Diagnosi
 
 
 class ConsultationFetcher(IBaseFetcher):
-    async def fetch(self, encounter_id: str) -> ConsultationProtocolV7:
+    async def fetch(self, context_id: str) -> ConsultationProtocolV7:
+        encounter_id = context_id
         # 1. Получаем "сырые" данные из БД через абстрактный источник
         raw_encounter = await self.source.get_encounter_data(encounter_id)
 

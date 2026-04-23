@@ -60,7 +60,7 @@ class CDARenderer:
             xsd_doc = etree.parse(str(xsd_path))
             xsd = etree.XMLSchema(xsd_doc)
             is_valid = xsd.validate(xml_doc)
-            errors = [str(error) for error in xsd.error_log]  # type: ignore
+            errors = [str(error) for error in xsd.error_log]
             return is_valid, errors
         except Exception as e:
             return False, [str(e)]

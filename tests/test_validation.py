@@ -278,6 +278,155 @@ def full_render_data():
     }
 
 
+@pytest.fixture
+def full_dataset_data(full_render_data):
+    data = full_render_data.copy()
+
+    # Добавляем второго участника (диагноз)
+    data["diagnoses"].append(
+        {
+            "id": {"root": "1.2.643.5.1.13.13.12.2.77.7831.100.1.1.52", "extension": "99313"},
+            "code": {
+                "code": "K29.3",
+                "codeSystem": "1.2.643.5.1.13.13.11.1005",
+                "codeSystemName": "МКБ-10",
+                "codeSystemVersion": "1.1",
+                "displayName": "Хронический поверхностный гастрит",
+            },
+            "text": "Сопутствующий диагноз",
+            "kind": "concomitant",
+            "disease_character": {
+                "code": "3",
+                "codeSystem": "1.2.643.5.1.13.13.11.1049",
+                "codeSystemName": "Характер заболевания",
+                "codeSystemVersion": "3.1",
+                "displayName": "Ранее установленное хроническое",
+            },
+        }
+    )
+
+    # M7: payment_participant
+    data["payment_participant"] = {
+        "payment_source": {
+            "code": "1",
+            "codeSystem": "1.2.643.5.1.13.13.11.1039",
+            "codeSystemName": "Источники оплаты медицинской помощи",
+            "displayName": "Средства обязательного медицинского страхования",
+            "version": "5.3",
+        },
+        "doc_info": {
+            "doc_type": {
+                "code": "1",
+                "codeSystem": "1.2.643.5.1.13.13.99.2.724",
+                "codeSystemName": "Типы документов оснований",
+                "displayName": "Полис ОМС",
+                "version": "1.1",
+            },
+            "insurance_policy_type": {
+                "code": "1",
+                "codeSystem": "1.2.643.5.1.13.13.11.1035",
+                "codeSystemName": "Виды полиса обязательного медицинского страхования",
+                "displayName": "Полис ОМС старого образца",
+                "version": "1.3",
+            },
+            "series": "ЧБ",
+            "number": "1344600",
+            "inn": "213546789",
+            "period": {"low": "2018-05-11", "high": "2028-05-12"},
+        },
+        "scoping_org": {
+            "id_root": "1.2.643.5.1.13.13.99.2.183",
+            "id_extension": "77013",
+            "name": 'ООО "СТРАХОВАЯ КОМПАНИЯ "ИНГОССТРАХ-М"',
+            "phone": "tel:+74957295571",
+            "address": {
+                "text": "г Москва, ул Рочдельская, д 15 стр 35",
+                "state_code": {"code": "77", "displayName": "г. Москва", "version": "6.5"},
+                "postal_code": "123376",
+                "fias": {
+                    "aoguid": "6bfbfcbb-87a7-4674-a8e5-bf5f1bbfbf92",
+                    "houseguid": "0b33a0e1-3427-409a-a3b7-e57716819f38",
+                },
+            },
+        },
+    }
+
+    # M8: referral_participant
+    data["referral_participant"] = {
+        "person": {
+            "id": {"root": "1.2.643.5.1.13.3.25.77.50.100.1.1.70", "extension": "183640"},
+            "snils": "52415372312",
+            "position": {
+                "code": "109",
+                "codeSystem": "1.2.643.5.1.13.13.11.1002",
+                "displayName": "Врач-терапевт",
+                "version": "9.12",
+            },
+            "name": {"family": "Кузнецов", "given": "Дмитрий", "patronymic": "Олегович"},
+            "phone": "tel:+79065184597",
+            "address": {
+                "text": "г Москва, ул Миклухо-Маклая, д 10",
+                "state_code": {"code": "77", "displayName": "г. Москва", "version": "6.5"},
+                "postal_code": "117198",
+                "fias": {
+                    "aoguid": "1dec06af-f015-425b-be4b-253fab5d7ccb",
+                    "houseguid": "b1adc7d0-8160-47d0-9903-d794b72078f6",
+                },
+            },
+        },
+        "organization": {
+            "id": "1.2.643.5.1.13.13.12.2.77.7893",
+            "name": 'ГБУЗ города Москвы "Городская поликлиника №164"',
+            "phone": "tel:+74954342582",
+            "address": {
+                "text": "г Москва, ул Миклухо-Маклая, д 10",
+                "state_code": {"code": "77", "displayName": "г. Москва", "version": "6.5"},
+                "postal_code": "117198",
+                "fias": {
+                    "aoguid": "1dec06af-f015-425b-be4b-253fab5d7ccb",
+                    "houseguid": "b1adc7d0-8160-47d0-9903-d794b72078f6",
+                },
+            },
+        },
+    }
+
+    # M9: in_fulfillment_of
+    data["in_fulfillment_of"] = {
+        "local_id": {"root": "1.2.643.5.1.13.3.25.77.50.100.1.1.51", "extension": "659481548"},
+        "remd_id": {"root": "1.2.643.5.1.13.13.17.1.1", "extension": "177.77.23.05.314159200"},
+        "doc_type": {
+            "code": "3",
+            "codeSystem": "1.2.643.5.1.13.13.11.1522",
+            "displayName": "Направление",
+            "version": "9.1",
+        },
+    }
+
+    return data
+
+
+def test_full_dataset_generation_and_validation(renderer, full_dataset_data, xsd_path, sch_path):
+    # Render XML
+    xml_output = renderer.render("main.xml.j2", full_dataset_data)
+
+    # XSD Validation
+    success_xsd, errors_xsd = renderer.validate_xsd(xml_output, xsd_path)
+    assert success_xsd, f"XSD validation failed: {errors_xsd}"
+
+    # Schematron Validation
+    success_sch, errors_sch = renderer.validate_schematron(xml_output, sch_path)
+    assert success_sch, f"Schematron validation failed: {errors_sch}"
+
+    # Verify presence of M7-M9 fields
+    assert 'typeCode="IND"' in xml_output
+    assert 'extension="77013"' in xml_output
+    assert 'displayName="Средства обязательного медицинского страхования"' in xml_output
+    assert 'typeCode="REF"' in xml_output
+    assert "Кузнецов" in xml_output
+    assert 'extension="177.77.23.05.314159200"' in xml_output
+    assert 'code="K29.3"' in xml_output
+
+
 def test_xsd_validation_detects_errors(renderer, xsd_path, full_render_data):
     # Missing required elements in XML
     xml_output = (

@@ -82,12 +82,12 @@
 
 ## Прогресс
 
-- [ ] M1: Исправить баг LANAM (anamnesis_life)
-- [ ] M2: DGN — цикл + text + kind mapping + disease_character
-- [ ] M3: Витальные параметры (height, heart_rate, bp, temp, weight) → секция VITALPARAM
-- [ ] M4: Параметризация DISABILITY + BENEFITS
-- [ ] M5: Параметризация SOCANAM (нетрудоспособность + даты)
-- [ ] M6: Мелкие дополнения context (license_id, insurance series, service_form/type)
+- [x] M1: Исправить баг LANAM (anamnesis_life)
+- [x] M2: DGN — цикл + text + kind mapping + disease_character
+- [x] M3: Витальные параметры (height, heart_rate, bp, temp, weight) → секция VITALPARAM
+- [x] M4: Параметризация DISABILITY + BENEFITS
+- [x] M5: Параметризация SOCANAM (нетрудоспособность + даты)
+- [x] M6: Мелкие дополнения context (license_id, insurance series, service_form/type)
 - [ ] M7: ParticipantINDModel + рендеринг
 - [ ] M8: ParticipantREFModel + рендеринг
 - [ ] M9: InFulfillmentOfModel + рендеринг

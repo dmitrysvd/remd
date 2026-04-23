@@ -119,6 +119,94 @@
         </intendedRecipient>
     </informationRecipient>
 
+    {% if payment_participant %}
+    <participant typeCode="IND">
+        <associatedEntity classCode="GUAR">
+            {{ cda.code(payment_participant.payment_source) }}
+            {% if payment_participant.doc_info %}
+            <identity:DocInfo>
+                {{ cda.code(payment_participant.doc_info.doc_type, tag='identity:IdentityDocType') }}
+                {% if payment_participant.doc_info.insurance_policy_type %}
+                {{ cda.code(payment_participant.doc_info.insurance_policy_type, tag='identity:InsurancePolicyType') }}
+                {% endif %}
+                {% if payment_participant.doc_info.series %}<identity:Series>{{ payment_participant.doc_info.series }}</identity:Series>{% endif %}
+                {% if payment_participant.doc_info.number %}<identity:Number>{{ payment_participant.doc_info.number }}</identity:Number>{% endif %}
+                {% if payment_participant.doc_info.inn %}<identity:INN>{{ payment_participant.doc_info.inn }}</identity:INN>{% endif %}
+                {% if payment_participant.doc_info.period %}
+                <identity:effectiveTime>
+                    <identity:low value="{{ payment_participant.doc_info.period.low | hl7date }}"/>
+                    {% if payment_participant.doc_info.period.high %}
+                    <identity:high value="{{ payment_participant.doc_info.period.high | hl7date }}"/>
+                    {% endif %}
+                </identity:effectiveTime>
+                {% endif %}
+            </identity:DocInfo>
+            {% endif %}
+            {% if payment_participant.scoping_org %}
+            <scopingOrganization>
+                <id root="{{ payment_participant.scoping_org.id_root }}" extension="{{ payment_participant.scoping_org.id_extension }}"/>
+                <name>{{ payment_participant.scoping_org.name }}</name>
+                {% if payment_participant.scoping_org.phone %}
+                <telecom use="WP" value="{{ payment_participant.scoping_org.phone }}"/>
+                {% endif %}
+                {% if payment_participant.scoping_org.address %}
+                {{ cda.addr(payment_participant.scoping_org.address) }}
+                {% endif %}
+            </scopingOrganization>
+            {% endif %}
+        </associatedEntity>
+    </participant>
+    {% endif %}
+
+    {% if referral_participant %}
+    <participant typeCode="REF">
+        <associatedEntity classCode="PROV">
+            {% if referral_participant.person.id %}
+            {{ cda.id(referral_participant.person.id) }}
+            {% endif %}
+            {% if referral_participant.person.snils %}
+            <id root="1.2.643.100.3" extension="{{ referral_participant.person.snils }}"/>
+            {% endif %}
+            {{ cda.code(referral_participant.person.position) }}
+            {% if referral_participant.person.address %}
+            {{ cda.addr(referral_participant.person.address) }}
+            {% endif %}
+            {% if referral_participant.person.phone %}
+            <telecom use="WP" value="{{ referral_participant.person.phone }}"/>
+            {% endif %}
+            <associatedPerson>
+                {{ cda.person(referral_participant.person.name) }}
+            </associatedPerson>
+            {% if referral_participant.organization %}
+            <scopingOrganization>
+                <id root="{{ referral_participant.organization.id }}"/>
+                <name>{{ referral_participant.organization.name }}</name>
+                {% if referral_participant.organization.phone %}
+                <telecom use="WP" value="{{ referral_participant.organization.phone }}"/>
+                {% endif %}
+                {% if referral_participant.organization.address %}
+                {{ cda.addr(referral_participant.organization.address) }}
+                {% endif %}
+            </scopingOrganization>
+            {% endif %}
+        </associatedEntity>
+    </participant>
+    {% endif %}
+
+    {% if in_fulfillment_of %}
+    <inFulfillmentOf>
+        <order>
+            {% if in_fulfillment_of.local_id %}
+            {{ cda.id(in_fulfillment_of.local_id) }}
+            {% endif %}
+            {% if in_fulfillment_of.remd_id %}
+            {{ cda.id(in_fulfillment_of.remd_id) }}
+            {% endif %}
+            {{ cda.code(in_fulfillment_of.doc_type) }}
+        </order>
+    </inFulfillmentOf>
+    {% endif %}
+
     <documentationOf>
         <serviceEvent>
             <code code="{{ event.type.code }}" codeSystem="1.2.643.5.1.13.13.99.2.726" codeSystemName="Типы документированных событий" displayName="{{ event.type.displayName }}" codeSystemVersion="{{ event.type.version or '3.50' }}"/>
@@ -323,13 +411,14 @@
             <component>
                 <section>
                     <code code="DGN" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Диагнозы" codeSystemVersion="1.38"/>
-                    {% for diag in diagnoses %}
+                    {% if diagnoses %}
                     <entry>
                         <observation classCode="OBS" moodCode="EVN">
-                            {{ cda.id(diag.id) if diag.id else '<id root="1.2.643.5.1.13.13.12.2.77.7831.100.1.1.52" extension="DGN' ~ loop.index ~ '"/>' | safe }}
+                            <id root="1.2.643.5.1.13.13.12.2.77.7831.100.1.1.52" extension="DGN1"/>
                             <code code="838" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Сведения об установленном диагнозе" codeSystemVersion="5.69"/>
                             <effectiveTime value="{{ encounter.period.low | hl7date }}"/>
                             {% set kind_map = {'main': ('1', 'Основное заболевание'), 'complication': ('2', 'Осложнение основного заболевания'), 'concomitant': ('3', 'Сопутствующее заболевание')} %}
+                            {% for diag in diagnoses %}
                             {% set kind_code, kind_name = kind_map[diag.kind] %}
                             <entryRelationship typeCode="COMP">
                                 <observation classCode="OBS" moodCode="EVN">
@@ -348,9 +437,10 @@
                                     {% endif %}
                                 </observation>
                             </entryRelationship>
+                            {% endfor %}
                         </observation>
                     </entry>
-                    {% endfor %}
+                    {% endif %}
                 </section>
             </component>
             <component>

@@ -114,6 +114,56 @@ class DocumentInfoModel(BaseModel):
     patient_condition: CDWithVersion
 
 
+class DocInfoModel(BaseModel):
+    doc_type: CDWithVersion
+    insurance_policy_type: CDWithVersion | None = None
+    series: str | None = None
+    number: str | None = None
+    inn: str | None = None
+    period: Period | None = None
+
+
+class InsuranceOrgModel(BaseModel):
+    id_root: str
+    id_extension: str
+    name: str
+    phone: str | None = None
+    address: ADDRWithVersion | None = None
+
+
+class ParticipantINDModel(BaseModel):
+    payment_source: CDWithVersion
+    doc_info: DocInfoModel | None = None
+    scoping_org: InsuranceOrgModel | None = None
+
+
+class ReferralPersonModel(BaseModel):
+    id: II | None = None
+    snils: str | None = None
+    position: CDWithVersion
+    address: ADDRWithVersion | None = None
+    phone: str | None = None
+    name: PN
+
+
+class ReferralOrgModel(BaseModel):
+    id: str
+    name: str
+    phone: str | None = None
+    address: ADDRWithVersion | None = None
+
+
+class ParticipantREFModel(BaseModel):
+    person: ReferralPersonModel
+    organization: ReferralOrgModel | None = None
+
+
+class InFulfillmentOfModel(BaseModel):
+    local_id: II | None = None
+    remd_id: II | None = None
+    doc_type: CDWithVersion
+
+
 class ConsultationProtocolV7RenderContext(ConsultationProtocolV7):
     """
     Полный контекст рендеринга для Протокола консультации Р7.
@@ -132,6 +182,10 @@ class ConsultationProtocolV7RenderContext(ConsultationProtocolV7):
     disabilities: list[DisabilityModel] = Field(default_factory=list)
     benefits: list[BenefitModel] = Field(default_factory=list)
     incapacity: IncapacityModel | None = None
+
+    payment_participant: ParticipantINDModel | None = None
+    referral_participant: ParticipantREFModel | None = None
+    in_fulfillment_of: InFulfillmentOfModel | None = None
 
     # Переопределяем поля из базовой модели, если нужно,
     # но ConsultationProtocolV7 уже содержит всё необходимое для payload.

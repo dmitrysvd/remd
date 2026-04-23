@@ -165,7 +165,7 @@ def test_invalid_data_raises_error():
         # missing complaints - which is required
     }
     with pytest.raises(ValidationError) as excinfo:
-        ConsultationProtocolV7(**invalid_data)
+        ConsultationProtocolV7(**invalid_data)  # type: ignore
 
     assert "complaints" in str(excinfo.value), (
         f"Expected 'complaints' in validation error, got: {excinfo.value}"
