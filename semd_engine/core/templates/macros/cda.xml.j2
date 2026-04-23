@@ -6,26 +6,28 @@
 <{{ tag }} code="{{ cd.code }}" codeSystem="{{ cd.codeSystem }}" codeSystemName="{{ cd.codeSystemName }}" codeSystemVersion="{{ cd.codeSystemVersion }}" displayName="{{ cd.displayName }}"{{ extra_attrs | safe }}>{% if cd.originalText %}<originalText>{{ cd.originalText }}</originalText>{% endif %}</{{ tag }}>
 {%- endmacro %}
 
-{% macro addr(a) -%}
+{% macro addr(a, use_type=False) -%}
 <addr>
-    {% if a.type %}
+    {% if use_type and a and a.type -%}
     <address:Type code="{{ a.type.code }}" codeSystem="1.2.643.5.1.13.13.11.1504" 
                   codeSystemName="Тип адреса пациента" displayName="{{ a.type.displayName }}" 
                   codeSystemVersion="{{ a.type.version or '1.4' }}"/>
-    {% endif %}
-    <streetAddressLine>{{ a.text }}</streetAddressLine>
-    {% if a.state_code %}
+    {%- endif %}
+    <streetAddressLine>{{ a.text if (a and a.text) else 'Адрес не указан' }}</streetAddressLine>
+    {% if a and a.state_code -%}
     <address:stateCode code="{{ a.state_code.code }}" codeSystem="1.2.643.5.1.13.13.99.2.206" 
                        codeSystemName="Субъекты Российской Федерации" displayName="{{ a.state_code.displayName }}" 
                        codeSystemVersion="{{ a.state_code.version or '6.5' }}"/>
-    {% endif %}
-    <postalCode>{{ a.postal_code or '101000' }}</postalCode>
-    {% if a.fias %}
+    {%- endif %}
+    {% if a and a.postal_code -%}
+    <postalCode>{{ a.postal_code }}</postalCode>
+    {%- endif %}
+    {% if a and a.fias -%}
     <fias:Address>
         <fias:AOGUID>{{ a.fias.aoguid }}</fias:AOGUID>
         {% if a.fias.houseguid %}<fias:HOUSEGUID>{{ a.fias.houseguid }}</fias:HOUSEGUID>{% endif %}
     </fias:Address>
-    {% endif %}
+    {%- endif %}
 </addr>
 {%- endmacro %}
 

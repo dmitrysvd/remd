@@ -51,9 +51,10 @@
                 {% endif %}
                 <identity:Number>{{ patient.insurance_policy.number }}</identity:Number>
             </identity:InsurancePolicy>
-
+            {% else %}
+            <identity:InsurancePolicy nullFlavor="NA"/>
             {% endif %}
-            {{ cda.addr(patient.address) }}
+            {{ cda.addr(patient.address, use_type=True) }}
             <telecom use="WP" value="{{ patient.contacts.phone }}"/>
             <patient>
                 {{ cda.person(patient.name) }}

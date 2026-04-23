@@ -133,6 +133,55 @@ class CDARange(BaseModel):
     high: str | None = None
 
 
+class AllergyReactionModel(BaseModel, UIMetadataMixin):
+    """Проявление аллергической реакции."""
+
+    code: Annotated[
+        CD,
+        UIFieldMetadata(
+            component=UIComponentType.NSI_AUTOCOMPLETE,
+            label="Клиническое проявление",
+            props={"nsi_oid": "1.2.643.5.1.13.13.11.1063"},
+        ),
+    ]
+    text: Annotated[
+        str | None,
+        UIFieldMetadata(component=UIComponentType.TEXT_INPUT, label="Описание (если 'иное')"),
+    ] = None
+
+
+class AllergyModel(BaseModel, UIMetadataMixin):
+    """Сведения об аллергической реакции."""
+
+    type: Annotated[
+        CD,
+        UIFieldMetadata(
+            component=UIComponentType.NSI_AUTOCOMPLETE,
+            label="Тип реакции",
+            props={"nsi_oid": "1.2.643.5.1.13.13.11.1064"},
+        ),
+    ]
+    effective_time: Annotated[
+        str, UIFieldMetadata(component=UIComponentType.DATE_PICKER, label="Дата выявления")
+    ]
+    agent_code: Annotated[
+        CD | None,
+        UIFieldMetadata(
+            component=UIComponentType.NSI_AUTOCOMPLETE,
+            label="МНН агента",
+            props={"nsi_oid": "1.2.643.5.1.13.13.11.1367"},
+        ),
+    ] = None
+    agent_text: Annotated[
+        str | None,
+        UIFieldMetadata(component=UIComponentType.TEXT_INPUT, label="Описание агента (текстом)"),
+    ] = None
+    comment: Annotated[
+        str | None, UIFieldMetadata(component=UIComponentType.TEXT_INPUT, label="Комментарий")
+    ] = None
+    reactions: list[AllergyReactionModel] = Field(default_factory=list, min_length=1)
+
+
 class ConsultationProtocolV7(BaseModel, UIMetadataMixin):
     """Корневая модель Протокола консультации Р7."""
 
@@ -160,6 +209,19 @@ class ConsultationProtocolV7(BaseModel, UIMetadataMixin):
             component=UIComponentType.TEXT_AREA, label="Анамнез заболевания", group="Анамнез"
         ),
     ]
+
+    # Секция: Аллергии
+    allergies_text: Annotated[
+        str | None,
+        UIFieldMetadata(
+            component=UIComponentType.TEXT_AREA,
+            label="Аллергологический анамнез (текст)",
+            group="Анамнез",
+        ),
+    ] = None
+    allergies: list[AllergyModel] = Field(
+        default_factory=list, json_schema_extra={"group": "Анамнез"}
+    )
 
     # Секция: Объективный статус
     objective_status: Annotated[

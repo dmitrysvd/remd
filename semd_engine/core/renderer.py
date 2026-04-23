@@ -64,20 +64,14 @@ class CDARenderer:
             xsd = etree.XMLSchema(xsd_doc)
             is_valid = xsd.validate(xml_doc)
 
-            # Форматируем ошибки с номерами строк и контекстом
+            # Форматируем ошибки с номерами строк
             errors = []
             xml_lines = xml_content.splitlines()
             for error in xsd.error_log:
                 line_idx = error.line - 1
-                error_msg = f"Line {error.line}: {error.message}\nContext:"
-
-                # Добавляем окружение (±2 строки)
-                start = max(0, line_idx - 2)
-                end = min(len(xml_lines), line_idx + 3)
-                for i in range(start, end):
-                    prefix = ">>> " if i == line_idx else "    "
-                    error_msg += f"\n{i + 1:4d}: {prefix}{xml_lines[i]}"
-
+                error_msg = f"Line {error.line}: {error.message}"
+                if 0 <= line_idx < len(xml_lines):
+                    error_msg += f"\n{error.line:4d}: >>> {xml_lines[line_idx]}"
                 errors.append(error_msg)
 
             if not is_valid:

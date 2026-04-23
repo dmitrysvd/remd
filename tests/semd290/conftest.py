@@ -81,7 +81,14 @@ def header_data():
             "insurance_policy": None,
             "name": {"family": "Сельченков", "given": "Михаил", "patronymic": "Владимирович"},
             "address": {
+                "type": {"code": "1", "displayName": "Адрес по месту жительства", "version": "1.4"},
                 "text": "г Москва, ул Твардовского, д 5 к 1, кв 42",
+                "state_code": {"code": "77", "displayName": "г. Москва", "version": "6.5"},
+                "postal_code": "123458",
+                "fias": {
+                    "aoguid": "45d96a50-7870-4183-872b-451c6573a7c9",
+                    "houseguid": "f8a876ac-4ea1-4a3e-b255-dd0d0f510802",
+                },
             },
             "gender": {
                 "code": "1",
@@ -100,6 +107,12 @@ def header_data():
             "phone": "tel:+74953754826",
             "address": {
                 "text": "г Москва, ул Ладожская, д 4-6 стр 1",
+                "state_code": {"code": "77", "displayName": "г. Москва", "version": "6.5"},
+                "postal_code": "105005",
+                "fias": {
+                    "aoguid": "212d3123-9c4d-4579-b31a-b5c6e9632b04",
+                    "houseguid": "e59f1e55-75c8-4037-9615-ed7ce751b745",
+                },
             },
         },
         "author": {
@@ -116,6 +129,12 @@ def header_data():
             "phone": "tel:+74957443256",
             "address": {
                 "text": "г Москва, ул Ладожская, д 4-6 стр 1",
+                "state_code": {"code": "77", "displayName": "г. Москва", "version": "6.5"},
+                "postal_code": "105005",
+                "fias": {
+                    "aoguid": "212d3123-9c4d-4579-b31a-b5c6e9632b04",
+                    "houseguid": "e59f1e55-75c8-4037-9615-ed7ce751b745",
+                },
             },
         },
         "event": {
