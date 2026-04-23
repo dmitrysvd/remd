@@ -26,10 +26,138 @@ def xsd_path():
 
 @pytest.fixture
 def sch_path():
-    # Full path is long, but necessary for the test context
     p = "docs/semd/290/1.2.643.5.1.13.13.15.13-1.2.643.5.1.13.13.15.13.7"
     p += "/schematron/290 Schematron v.1.7.sch"
     return Path(p).absolute()
+
+
+@pytest.fixture
+def header_data():
+    return {
+        "header": {
+            "id": {"root": "1.2.643.5.1.13.13.12.2.77.7831.100.1.1.51", "extension": "144632"},
+            "type_code": {
+                "code": "290",
+                "codeSystem": "1.2.643.5.1.13.13.11.1520",
+                "codeSystemName": "Электронные медицинские документы",
+                "codeSystemVersion": "12.66",
+                "displayName": "Протокол консультации (CDA) Редакция 7",
+                "translation": {
+                    "code": "13",
+                    "codeSystem": "1.2.643.5.1.13.13.99.2.1079",
+                    "codeSystemName": "Виды структурированных электронных медицинских документов",
+                    "codeSystemVersion": "2.3",
+                    "displayName": "Протокол консультации",
+                },
+            },
+            "title": "Протокол консультации",
+            "confidentiality": {
+                "code": "N",
+                "codeSystem": "1.2.643.5.1.13.13.99.2.285",
+                "codeSystemName": "Уровень конфиденциальности медицинского документа",
+                "displayName": "Обычный",
+                "version": "1.2",
+            },
+            "set_id": {"root": "1.2.643.5.1.13.13.12.2.77.7831.100.1.1.50", "extension": "163725"},
+            "version": 1,
+        },
+        "patient": {
+            "id": {"root": "1.2.643.5.1.13.13.12.2.77.7831.100.1.1.10", "extension": "735486"},
+            "snils": "25463625426",
+            "identity_doc": {
+                "type": {
+                    "code": "1",
+                    "codeSystem": "1.2.643.5.1.13.13.99.2.48",
+                    "codeSystemName": "Документы, удостоверяющие личность",
+                    "displayName": "Паспорт гражданина Российской Федерации",
+                    "version": "7.2",
+                },
+                "series": "4509",
+                "number": "395643",
+                "issue_org": "ОВД",
+                "issue_org_code": "770-095",
+                "issue_date": "2005-02-18",
+            },
+            "insurance_policy": None,
+            "name": {"family": "Сельченков", "given": "Михаил", "patronymic": "Владимирович"},
+            "address": {
+                "text": "г Москва, ул Твардовского, д 5 к 1, кв 42",
+            },
+            "gender": {
+                "code": "1",
+                "displayName": "Мужской",
+                "codeSystem": "1.2.643.5.1.13.13.11.1040",
+            },
+            "birth_date": "1960-02-17",
+            "contacts": {"phone": "tel:+74951953745"},
+        },
+        "organization": {
+            "id": "1.2.643.5.1.13.13.12.2.77.7831",
+            "ogrn": "1027739578404",
+            "okpo": "5009247",
+            "okato": "45263594000",
+            "name": "ГОРОДСКАЯ ПОЛИКЛИНИКА № 64",
+            "phone": "tel:+74953754826",
+            "address": {
+                "text": "г Москва, ул Ладожская, д 4-6 стр 1",
+            },
+        },
+        "author": {
+            "id": {"root": "1.2.643.5.1.13.13.12.2.77.7831.100.1.1.70", "extension": "542174"},
+            "snils": "52415372312",
+            "position": {
+                "code": "34",
+                "codeSystem": "1.2.643.5.1.13.13.11.1002",
+                "codeSystemName": "Должности медицинских и фармацевтических работников",
+                "codeSystemVersion": "9.12",
+                "displayName": "Врач-кардиолог",
+            },
+            "name": {"family": "Смирнов", "given": "Александр", "patronymic": "Игоревич"},
+            "phone": "tel:+74957443256",
+            "address": {
+                "text": "г Москва, ул Ладожская, д 4-6 стр 1",
+            },
+        },
+        "event": {
+            "type": {"code": "1", "displayName": "Консультация", "version": "3.50"},
+            "period": {"low": "2026-04-21 14:00:00", "high": "2026-04-21 14:15:00"},
+            "conditions": None,
+        },
+        "encounter": {
+            "period": {"low": "2026-04-21 14:00:00", "high": "2026-04-21 14:00:00"},
+        },
+        "document_info": {
+            "case_type": {"code": "2", "displayName": "Повторный", "version": "2.1"},
+            "patient_condition": {
+                "code": "1",
+                "displayName": "Удовлетворительное",
+                "version": "2.4",
+            },
+        },
+    }
+
+
+@pytest.fixture
+def minimal_sample_data():
+    return {
+        "event_date": "2026-04-21 14:00:00",
+        "complaints": "Тестовая жалоба",
+        "anamnesis_disease": "Тестовый анамнез",
+        "objective_status": "Тестовый статус",
+        "diagnoses": [
+            {
+                "id": {"root": "1.2.643.5.1.13.13.12.2.77.7831.100.1.1.52", "extension": "99312"},
+                "code": {
+                    "code": "K29.5",
+                    "codeSystem": "1.2.643.5.1.13.13.11.1005",
+                    "displayName": "Хронический гастрит",
+                },
+                "text": "Основной диагноз",
+                "kind": "main",
+            }
+        ],
+        "recommendations": "Тестовые рекомендации",
+    }
 
 
 @pytest.fixture
@@ -403,83 +531,3 @@ def full_dataset_data(full_render_data):
     }
 
     return data
-
-
-def test_full_dataset_generation_and_validation(renderer, full_dataset_data, xsd_path, sch_path):
-    # Render XML
-    xml_output = renderer.render("main.xml.j2", full_dataset_data)
-
-    # XSD Validation
-    success_xsd, errors_xsd = renderer.validate_xsd(xml_output, xsd_path)
-    assert success_xsd, f"XSD validation failed: {errors_xsd}"
-
-    # Schematron Validation
-    success_sch, errors_sch = renderer.validate_schematron(xml_output, sch_path)
-    assert success_sch, f"Schematron validation failed: {errors_sch}"
-
-    # Verify presence of M7-M9 fields
-    assert 'typeCode="IND"' in xml_output
-    assert 'extension="77013"' in xml_output
-    assert 'displayName="Средства обязательного медицинского страхования"' in xml_output
-    assert 'typeCode="REF"' in xml_output
-    assert "Кузнецов" in xml_output
-    assert 'extension="177.77.23.05.314159200"' in xml_output
-    assert 'code="K29.3"' in xml_output
-
-
-def test_xsd_validation_detects_errors(renderer, xsd_path, full_render_data):
-    # Missing required elements in XML
-    xml_output = (
-        '<ClinicalDocument xmlns="urn:hl7-org:v3">'
-        "<title>Missing everything else</title></ClinicalDocument>"
-    )
-    success, errors = renderer.validate_xsd(xml_output, xsd_path)
-    assert not success
-    assert len(errors) > 0
-
-
-def test_schematron_validation_detects_errors(renderer, sch_path, full_render_data):
-    # RealmCode must be RU
-    xml_output = """<ClinicalDocument xmlns="urn:hl7-org:v3">
-        <realmCode code="US"/>
-        <typeId root="2.16.840.1.113883.1.3" extension="POCD_MT000040"/>
-    </ClinicalDocument>"""
-    success, errors = renderer.validate_schematron(xml_output, sch_path)
-    assert not success, f"Expected validation to fail, but it succeeded. Errors: {errors}"
-    assert any("realmCode" in e or "RU" in e for e in errors), (
-        f"Expected 'realmCode' or 'RU' in errors, got: {errors}"
-    )
-
-
-def test_full_v290_r7_generation_and_validation(renderer, full_render_data, xsd_path, sch_path):
-    # Render XML
-    xml_output = renderer.render("main.xml.j2", full_render_data)
-
-    # XSD Validation
-    success_xsd, errors_xsd = renderer.validate_xsd(xml_output, xsd_path)
-    assert success_xsd, f"XSD validation failed: {errors_xsd}"
-
-    # Schematron Validation
-    success_sch, errors_sch = renderer.validate_schematron(xml_output, sch_path)
-    assert success_sch, f"Schematron validation failed: {errors_sch}"
-
-    # Verify new fields presence in XML
-    assert "Тестовый анамнез жизни" in xml_output
-    assert 'code="K29.5"' in xml_output
-    assert "Основной диагноз" in xml_output
-    assert 'code="1" codeSystem="1.2.643.5.1.13.13.11.1049"' in xml_output  # disease_character
-    assert 'code="6" codeSystem="1.2.643.5.1.13.13.99.2.262"' in xml_output  # vital param
-    assert 'code="3" codeSystem="1.2.643.5.1.13.13.11.1053"' in xml_output  # disability
-    assert 'code="1.00000.0216" codeSystem="1.2.643.5.1.13.13.99.2.541"' in xml_output  # benefit
-    assert 'code="1" codeSystem="1.2.643.5.1.13.13.11.1044"' in xml_output  # incapacity reason
-
-    # M6 Verify
-    assert "<identity:Series>МЮ</identity:Series>" in xml_output
-    assert 'root="1.2.643.5.1.13.2.1.1.1504.101" extension="ЛО-77-01-000000"' in xml_output
-    assert 'codeSystem="1.2.643.5.1.13.13.11.1551"' in xml_output  # service form
-    assert 'code="3"' in xml_output  # service form code
-    assert 'codeSystem="1.2.643.5.1.13.13.11.1034"' in xml_output  # service type
-
-    # Check if files exist
-    assert xsd_path.exists(), f"XSD path {xsd_path} does not exist"
-    assert sch_path.exists(), f"Schematron path {sch_path} does not exist"
