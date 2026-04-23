@@ -118,6 +118,19 @@ class PrescribedMedication(BaseModel, UIMetadataMixin):
             component=UIComponentType.TEXT_INPUT, label="Дозировка и способ применения"
         ),
     ]
+    period: Annotated[
+        CDARange | None,
+        UIFieldMetadata(component=UIComponentType.DATE_RANGE, label="Период приема"),
+    ] = None
+    period_value: Annotated[
+        str | None,
+        UIFieldMetadata(component=UIComponentType.TEXT_INPUT, label="Кратность приема (значение)"),
+    ] = None
+
+
+class CDARange(BaseModel):
+    low: str | None = None
+    high: str | None = None
 
 
 class ConsultationProtocolV7(BaseModel, UIMetadataMixin):

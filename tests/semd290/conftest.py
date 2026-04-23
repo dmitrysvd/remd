@@ -408,9 +408,10 @@ def full_render_data():
 
 @pytest.fixture
 def full_dataset_data(full_render_data):
+    """Provides a comprehensive dataset covering as many fields as possible for SEMD 290."""
     data = full_render_data.copy()
 
-    # Добавляем второго участника (диагноз)
+    # Add second diagnosis (concomitant)
     data["diagnoses"].append(
         {
             "id": {"root": "1.2.643.5.1.13.13.12.2.77.7831.100.1.1.52", "extension": "99313"},
@@ -430,6 +431,22 @@ def full_dataset_data(full_render_data):
                 "codeSystemVersion": "3.1",
                 "displayName": "Ранее установленное хроническое",
             },
+        }
+    )
+
+    # Add third diagnosis (complication)
+    data["diagnoses"].append(
+        {
+            "id": {"root": "1.2.643.5.1.13.13.12.2.77.7831.100.1.1.52", "extension": "99314"},
+            "code": {
+                "code": "K29.9",
+                "codeSystem": "1.2.643.5.1.13.13.11.1005",
+                "codeSystemName": "МКБ-10",
+                "codeSystemVersion": "1.1",
+                "displayName": "Гастродуоденит неуточненный",
+            },
+            "text": "Осложнение",
+            "kind": "complication",
         }
     )
 
@@ -529,5 +546,43 @@ def full_dataset_data(full_render_data):
             "version": "9.1",
         },
     }
+
+    # Prescriptions (Medications)
+    data["prescriptions"] = [
+        {
+            "is_nsi": True,
+            "nsi_code": {
+                "code": "21.20.10.144-000001-1-00021-0000000000000",
+                "codeSystem": "1.2.643.5.1.13.13.99.2.611",
+                "displayName": "Аспирин",
+            },
+            "dosage_text": "1 таблетка в день",
+        },
+        {
+            "is_nsi": False,
+            "manual_text": "Какой-то кастомный препарат",
+            "dosage_text": "2 раза в день",
+        },
+    ]
+
+    # Add second disability for testing list coverage
+    data["disabilities"].append(
+        {
+            "group": {
+                "code": "2",
+                "codeSystem": "1.2.643.5.1.13.13.11.1053",
+                "displayName": "Вторая группа",
+                "version": "3.4",
+            },
+            "low": "2025-01-01",
+            "high": "2026-01-01",
+            "establishment_type": {
+                "code": "1",
+                "codeSystem": "1.2.643.5.1.13.13.99.2.166",
+                "displayName": "Первично",
+                "version": "5.69",
+            },
+        }
+    )
 
     return data

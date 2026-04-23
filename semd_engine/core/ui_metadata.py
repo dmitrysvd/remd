@@ -19,6 +19,7 @@ class UIComponentType(StrEnum):
     DATE_PICKER = "DatePicker"
     NUMBER_INPUT = "NumberInput"
     SWITCH = "Switch"
+    DATE_RANGE = "DateRange"
 
 
 @dataclass

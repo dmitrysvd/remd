@@ -252,11 +252,13 @@
                     <entry>
                         <observation classCode="OBS" moodCode="EVN">
                             <code code="800" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Обращение" codeSystemVersion="5.69"/>
-                            <value xsi:type="CD" code="{{ document_info.case_type.code }}" 
-                                   codeSystem="1.2.643.5.1.13.13.11.1007" 
-                                   codeSystemName="Вид случая госпитализации или обращения (первичный, повторный)" 
-                                   displayName="{{ document_info.case_type.displayName }}" 
-                                   codeSystemVersion="{{ document_info.case_type.version or '2.1' }}"/>
+                                <value xsi:type="CD" code="{{ document_info.case_type.code }}" 
+                                       codeSystem="1.2.643.5.1.13.13.11.1007" 
+                                       codeSystemName="Вид случая госпитализации или обращения (первичный, повторный)" 
+                                       displayName="{{ document_info.case_type.displayName }}" 
+                                       codeSystemVersion="{{ document_info.case_type.version or '2.1' }}">
+                                    <translation code="{{ document_info.case_type.code }}" codeSystem="1.2.643.5.1.13.13.11.1041" codeSystemName="Вид диагноза" codeSystemVersion="2.1" displayName="{{ document_info.case_type.displayName }}"/>
+                                </value>
                         </observation>
                     </entry>
                     <entry>
@@ -358,7 +360,11 @@
                             <entryRelationship typeCode="COMP">
                                 <observation classCode="OBS" moodCode="EVN">
                                     <code code="815" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Порядок установления инвалидности" codeSystemVersion="5.69"/>
-                                    {{ cda.code(dis.establishment_type, tag='value', extra_attrs=' xsi:type="CD"') }}
+                                    <value xsi:type="CD" code="{{ dis.establishment_type.code }}" 
+                                           codeSystem="1.2.643.5.1.13.13.11.1041" 
+                                           codeSystemName="Вид диагноза" 
+                                           codeSystemVersion="{{ dis.establishment_type.version or '2.1' }}" 
+                                           displayName="{{ dis.establishment_type.displayName }}"/>
                                 </observation>
                             </entryRelationship>
                             {% endif %}
@@ -425,7 +431,9 @@
                                     <code code="{{ kind_code }}" codeSystem="1.2.643.5.1.13.13.11.1077" codeSystemName="Виды нозологических единиц диагноза" displayName="{{ kind_name }}" codeSystemVersion="2.2"/>
                                     <text>{{ diag.text }}</text>
                                     <value xsi:type="CD" code="{{ diag.code.code }}" codeSystem="1.2.643.5.1.13.13.11.1005"
-                                           codeSystemName="МКБ-10" codeSystemVersion="1.1" displayName="{{ diag.code.displayName }}"/>
+                                           codeSystemName="МКБ-10" codeSystemVersion="1.1" displayName="{{ diag.code.displayName }}">
+                                        <translation code="{{ kind_code }}" codeSystem="1.2.643.5.1.13.13.11.1041" codeSystemName="Вид диагноза" codeSystemVersion="2.1" displayName="{{ kind_name }}"/>
+                                    </value>
                                     {% if diag.disease_character %}
                                     <entryRelationship typeCode="COMP">
                                         <observation classCode="OBS" moodCode="EVN">
@@ -460,15 +468,28 @@
                     <code code="DRUG" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Назначенные лекарственные препараты" codeSystemVersion="1.38"/>
                     {% for p in prescriptions %}
                     <entry>
-                        <substanceAdministration classCode="SBADM" moodCode="INT">
+                        <substanceAdministration classCode="SBADM" moodCode="EVN">
+                            <id root="1.2.643.5.1.13.13.12.2.77.7831.100.1.1.52" extension="MED{{ loop.index }}"/>
+                            <code nullFlavor="NI"/>
                             <text>{{ p.dosage_text }}</text>
-                            <consumable>
-                                <manufacturedProduct>
-                                    <manufacturedMaterial>
+                            <effectiveTime xsi:type="IVL_TS">
+                                <low value="{{ (p.period.low if p.period else event_date) | hl7date }}"/>
+                                <high value="{{ (p.period.high if p.period else event_date) | hl7date }}"/>
+                            </effectiveTime>
+                            <effectiveTime xsi:type="PIVL_TS" institutionSpecified="false">
+                                <period value="{{ p.period_value or '12' }}" unit="h">
+                                    <translation value="{{ p.period_value or '12' }}" code="23" displayName="ч" codeSystem="1.2.643.5.1.13.13.11.1358" codeSystemName="Единицы измерения" codeSystemVersion="3.33"/>
+                                </period>
+                            </effectiveTime>
+                            <routeCode code="1" codeSystem="1.2.643.5.1.13.13.11.1468" codeSystemName="Пути введения" codeSystemVersion="1.0" displayName="Неизвестно"/>
+                            <doseQuantity value="0"/>
+                            <consumable typeCode="CSM">
+                                <manufacturedProduct classCode="MANU">
+                                    <manufacturedMaterial classCode="MMAT" determinerCode="KIND">
                                         {% if p.is_nsi and p.nsi_code %}
                                         {{ cda.code(p.nsi_code) }}
                                         {% else %}
-                                        <name>{{ p.manual_text }}</name>
+                                        <code code="NI" codeSystem="1.2.643.5.1.13.13.99.2.611" codeSystemName="ЕСКЛП" codeSystemVersion="1.0" displayName="{{ p.manual_text }}"></code>
                                         {% endif %}
                                     </manufacturedMaterial>
                                 </manufacturedProduct>

@@ -1,3 +1,6 @@
+import subprocess
+import tempfile
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -54,22 +57,39 @@ class CDARenderer:
         return template.render(**context_dict)
 
     def validate_xsd(self, xml_content: str, xsd_path: str | Path) -> tuple[bool, list[str]]:
-        """Валидирует XML по XSD схеме. Возвращает (успех, список ошибок)."""
+        """Валидирует XML по XSD схеме. Возвращает (успех, список ошибок с номерами строк)."""
         try:
             xml_doc = etree.fromstring(xml_content.encode("utf-8"))
             xsd_doc = etree.parse(str(xsd_path))
             xsd = etree.XMLSchema(xsd_doc)
             is_valid = xsd.validate(xml_doc)
-            errors = [str(error) for error in xsd.error_log]
+
+            # Форматируем ошибки с номерами строк и контекстом
+            errors = []
+            xml_lines = xml_content.splitlines()
+            for error in xsd.error_log:
+                line_idx = error.line - 1
+                error_msg = f"Line {error.line}: {error.message}\nContext:"
+
+                # Добавляем окружение (±2 строки)
+                start = max(0, line_idx - 2)
+                end = min(len(xml_lines), line_idx + 3)
+                for i in range(start, end):
+                    prefix = ">>> " if i == line_idx else "    "
+                    error_msg += f"\n{i + 1:4d}: {prefix}{xml_lines[i]}"
+
+                errors.append(error_msg)
+
+            if not is_valid:
+                dump_path = self._dump_failed_xml(xml_content, "xsd_fail")
+                errors.insert(0, f"DEBUG: Failed XML dumped to {dump_path}")
+
             return is_valid, errors
         except Exception as e:
             return False, [str(e)]
 
     def validate_schematron(self, xml_content: str, sch_path: str | Path) -> tuple[bool, list[str]]:
         """Валидирует XML по Schematron через schxslt-cli.jar. Возвращает (успех, список ошибок)."""
-        import subprocess
-        import tempfile
-
         jar_path = Path("schxslt-cli.jar").absolute()
         if not jar_path.exists():
             return False, [f"Schematron CLI jar not found at {jar_path}"]
@@ -109,6 +129,10 @@ class CDARenderer:
             if not is_valid and not errors:
                 errors = [output.strip()]
 
+            if not is_valid:
+                dump_path = self._dump_failed_xml(xml_content, "sch_fail")
+                errors.insert(0, f"DEBUG: Failed XML dumped to {dump_path}")
+
             return is_valid, errors
 
         except Exception as e:
@@ -116,6 +140,12 @@ class CDARenderer:
         finally:
             if Path(tmp_xml_path).exists():
                 Path(tmp_xml_path).unlink()
+
+    def _dump_failed_xml(self, xml_content: str, prefix: str) -> Path:
+        """Сохраняет XML во временный файл для отладки."""
+        dump_path = Path(tempfile.gettempdir()) / f"remd_{prefix}_{uuid.uuid4().hex[:8]}.xml"
+        dump_path.write_text(xml_content, encoding="utf-8")
+        return dump_path
 
     @staticmethod
     def _hl7date_filter(dt_str: str) -> str:
