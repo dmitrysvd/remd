@@ -171,6 +171,7 @@ def full_render_data():
             "period": {"low": "2026-04-21 14:00:00", "high": "2026-04-21 14:00:00"},
         },
         "complaints": "Тестовая жалоба",
+        "anamnesis_life": "Тестовый анамнез жизни",
         "anamnesis_disease": "Тестовый анамнез",
         "objective_status": "Тестовый статус",
         "diagnoses": [
@@ -185,9 +186,50 @@ def full_render_data():
                 },
                 "text": "Основной диагноз",
                 "kind": "main",
+                "disease_character": {
+                    "code": "1",
+                    "codeSystem": "1.2.643.5.1.13.13.11.1049",
+                    "codeSystemName": "Характер заболевания",
+                    "codeSystemVersion": "3.1",
+                    "displayName": "Впервые в жизни установленное хроническое",
+                },
             }
         ],
         "prescriptions": [],
+        "vital_params": [
+            {
+                "code": {
+                    "code": "6",
+                    "codeSystem": "1.2.643.5.1.13.13.99.2.262",
+                    "codeSystemName": "Витальные параметры",
+                    "displayName": "Температура тела",
+                    "codeSystemVersion": "1.0",
+                },
+                "value": 36.6,
+                "unit": "Cel",
+                "unit_code": {
+                    "code": "Cel",
+                    "codeSystem": "1.2.643.5.1.13.13.11.1358",
+                    "displayName": "градус Цельсия",
+                },
+            },
+            {
+                "code": {
+                    "code": "50",
+                    "codeSystem": "1.2.643.5.1.13.13.99.2.262",
+                    "codeSystemName": "Витальные параметры",
+                    "displayName": "Масса тела",
+                    "codeSystemVersion": "1.0",
+                },
+                "value": 75.0,
+                "unit": "kg",
+                "unit_code": {
+                    "code": "kg",
+                    "codeSystem": "1.2.643.5.1.13.13.11.1358",
+                    "displayName": "килограмм",
+                },
+            },
+        ],
         "recommendations": "Тестовые рекомендации",
     }
 

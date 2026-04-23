@@ -42,6 +42,46 @@ class DiagnosisModel(BaseModel, UIMetadataMixin):
             },
         ),
     ]
+    disease_character: Annotated[
+        CD | None,
+        UIFieldMetadata(
+            component=UIComponentType.NSI_AUTOCOMPLETE,
+            label="Характер заболевания",
+            props={"nsi_oid": "1.2.643.5.1.13.13.11.1049"},
+        ),
+    ] = None
+
+
+class VitalParamModel(BaseModel, UIMetadataMixin):
+    """Витальный параметр (температура, вес, рост и т.д.)."""
+
+    code: Annotated[
+        CD,
+        UIFieldMetadata(
+            component=UIComponentType.NSI_AUTOCOMPLETE,
+            label="Тип параметра",
+            props={"nsi_oid": "1.2.643.5.1.13.13.99.2.262"},
+        ),
+    ]
+    value: Annotated[
+        float, UIFieldMetadata(component=UIComponentType.NUMBER_INPUT, label="Значение")
+    ]
+    unit: Annotated[
+        str, UIFieldMetadata(component=UIComponentType.TEXT_INPUT, label="Единица измерения (UCUM)")
+    ]
+    unit_code: Annotated[
+        CD,
+        UIFieldMetadata(
+            component=UIComponentType.NSI_AUTOCOMPLETE,
+            label="Единица измерения (НСИ)",
+            props={"nsi_oid": "1.2.643.5.1.13.13.11.1358"},
+        ),
+    ]
+    measured_at: Annotated[
+        str | None,
+        UIFieldMetadata(component=UIComponentType.DATE_PICKER, label="Дата измерения"),
+    ] = None
+    observation_id: II | None = None
 
 
 class PrescribedMedication(BaseModel, UIMetadataMixin):
@@ -118,21 +158,10 @@ class ConsultationProtocolV7(BaseModel, UIMetadataMixin):
         ),
     ]
 
-    # Секция: Витальные параметры (могут быть динамическими)
-    temp: Annotated[
-        float | None,
-        UIFieldMetadata(
-            component=UIComponentType.NUMBER_INPUT,
-            label="Температура тела",
-            group="Объективный статус",
-        ),
-    ] = None
-    weight: Annotated[
-        float | None,
-        UIFieldMetadata(
-            component=UIComponentType.NUMBER_INPUT, label="Вес (кг)", group="Объективный статус"
-        ),
-    ] = None
+    # Секция: Витальные параметры
+    vital_params: list[VitalParamModel] = Field(
+        default_factory=list, json_schema_extra={"group": "Объективный статус"}
+    )
 
     # Секция: Диагнозы
     diagnoses: list[DiagnosisModel] = Field(..., min_length=1)
@@ -145,5 +174,6 @@ class ConsultationProtocolV7(BaseModel, UIMetadataMixin):
 
 
 DiagnosisModel.model_rebuild()
+VitalParamModel.model_rebuild()
 PrescribedMedication.model_rebuild()
 ConsultationProtocolV7.model_rebuild()

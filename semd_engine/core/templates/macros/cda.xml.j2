@@ -2,8 +2,8 @@
 <id root="{{ ii.root }}"{{ ii.extension | xml_attr('extension') }}/>
 {%- endmacro %}
 
-{% macro code(cd, tag='code') -%}
-<{{ tag }} code="{{ cd.code }}" codeSystem="{{ cd.codeSystem }}" codeSystemName="{{ cd.codeSystemName }}" codeSystemVersion="{{ cd.codeSystemVersion }}" displayName="{{ cd.displayName }}">{% if cd.originalText %}<originalText>{{ cd.originalText }}</originalText>{% endif %}</{{ tag }}>
+{% macro code(cd, tag='code', extra_attrs='') -%}
+<{{ tag }} code="{{ cd.code }}" codeSystem="{{ cd.codeSystem }}" codeSystemName="{{ cd.codeSystemName }}" codeSystemVersion="{{ cd.codeSystemVersion }}" displayName="{{ cd.displayName }}"{{ extra_attrs | safe }}>{% if cd.originalText %}<originalText>{{ cd.originalText }}</originalText>{% endif %}</{{ tag }}>
 {%- endmacro %}
 
 {% macro addr(a) -%}

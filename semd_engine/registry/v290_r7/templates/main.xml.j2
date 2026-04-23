@@ -222,7 +222,7 @@
                     <entry>
                         <observation classCode="OBS" moodCode="EVN">
                             <code code="7006" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Текстовое описание" codeSystemVersion="5.69"/>
-                            <value xsi:type="ST">{{ anamnesis_disease }}</value>
+                            <value xsi:type="ST">{{ anamnesis_life }}</value>
                         </observation>
                     </entry>
                 </section>
@@ -257,37 +257,60 @@
                     </entry>
                 </section>
             </component>
+            {% if vital_params %}
+            <component>
+                <section>
+                    <code code="VITALPARAM" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Витальные параметры" codeSystemVersion="1.38"/>
+                    {% for vp in vital_params %}
+                    <entry>
+                        <observation classCode="OBS" moodCode="EVN">
+                            {% if vp.observation_id %}
+                            {{ cda.id(vp.observation_id) }}
+                            {% else %}
+                            <id root="1.2.643.5.1.13.13.12.2.77.7831.100.1.1.52" extension="VP{{ loop.index }}"/>
+                            {% endif %}
+                            {{ cda.code(vp.code) }}
+                            <effectiveTime value="{{ (vp.measured_at or event_date) | hl7date }}"/>
+                            <value xsi:type="PQ" value="{{ vp.value }}" unit="{{ vp.unit }}">
+                                {{ cda.code(vp.unit_code, tag='translation', extra_attrs=' value="' ~ vp.value ~ '"') }}
+                            </value>
+                        </observation>
+                    </entry>
+                    {% endfor %}
+                </section>
+            </component>
+            {% endif %}
             <component>
                 <section>
                     <code code="DGN" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Диагнозы" codeSystemVersion="1.38"/>
+                    {% for diag in diagnoses %}
                     <entry>
                         <observation classCode="OBS" moodCode="EVN">
-                            <id root="{{ diagnoses[0].id.root }}" extension="{{ diagnoses[0].id.extension }}"/>
+                            {{ cda.id(diag.id) if diag.id else '<id root="1.2.643.5.1.13.13.12.2.77.7831.100.1.1.52" extension="DGN' ~ loop.index ~ '"/>' | safe }}
                             <code code="838" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Сведения об установленном диагнозе" codeSystemVersion="5.69"/>
                             <effectiveTime value="{{ encounter.period.low | hl7date }}"/>
+                            {% set kind_map = {'main': ('1', 'Основное заболевание'), 'complication': ('2', 'Осложнение основного заболевания'), 'concomitant': ('3', 'Сопутствующее заболевание')} %}
+                            {% set kind_code, kind_name = kind_map[diag.kind] %}
                             <entryRelationship typeCode="COMP">
                                 <observation classCode="OBS" moodCode="EVN">
-                                    <code code="1" codeSystem="1.2.643.5.1.13.13.11.1077" codeSystemName="Тип диагноза" displayName="Основное заболевание" codeSystemVersion="2.2"/>
-                                    <value xsi:type="CD" code="{{ diagnoses[0].code.code }}" codeSystem="{{ diagnoses[0].code.codeSystem }}"
-                                           codeSystemName="{{ diagnoses[0].code.codeSystemName }}" codeSystemVersion="{{ diagnoses[0].code.codeSystemVersion }}" displayName="{{ diagnoses[0].code.displayName }}"/>
+                                    <code code="{{ kind_code }}" codeSystem="1.2.643.5.1.13.13.11.1077" codeSystemName="Виды нозологических единиц диагноза" displayName="{{ kind_name }}" codeSystemVersion="2.2"/>
+                                    <text>{{ diag.text }}</text>
+                                    <value xsi:type="CD" code="{{ diag.code.code }}" codeSystem="1.2.643.5.1.13.13.11.1005"
+                                           codeSystemName="МКБ-10" codeSystemVersion="1.1" displayName="{{ diag.code.displayName }}"/>
+                                    {% if diag.disease_character %}
                                     <entryRelationship typeCode="COMP">
                                         <observation classCode="OBS" moodCode="EVN">
-                                            <code code="12014" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Диагноз по МКБ" codeSystemVersion="5.69"/>
-                                            <value xsi:type="CD" code="{{ diagnoses[0].code.code }}" codeSystem="1.2.643.5.1.13.13.11.1049"
-                                                   codeSystemName="МКБ-10" codeSystemVersion="1.1" displayName="{{ diagnoses[0].code.displayName }}"/>
+                                            <code code="12014" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Характер заболевания" codeSystemVersion="5.69"/>
+                                            <value xsi:type="CD" code="{{ diag.disease_character.code }}" codeSystem="{{ diag.disease_character.codeSystem }}"
+                                                   codeSystemName="{{ diag.disease_character.codeSystemName }}" codeSystemVersion="{{ diag.disease_character.codeSystemVersion }}" displayName="{{ diag.disease_character.displayName }}"/>
                                         </observation>
                                     </entryRelationship>
-                                    <entryRelationship typeCode="COMP">
-                                        <observation classCode="OBS" moodCode="EVN">
-                                            <code code="823" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Характер заболевания" codeSystemVersion="5.69"/>
-                                            <value xsi:type="CD" code="{{ diagnoses[0].code.code }}" codeSystem="1.2.643.5.1.13.13.11.1005"
-                                                   codeSystemName="МКБ-10" codeSystemVersion="1.1" displayName="{{ diagnoses[0].code.displayName }}"/>
-                                        </observation>
-                                    </entryRelationship>
+                                    {% endif %}
                                 </observation>
                             </entryRelationship>
                         </observation>
                     </entry>
+                    {% endfor %}
                 </section>
             </component>
             <component>
