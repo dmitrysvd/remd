@@ -183,17 +183,21 @@
                     </entry>
                 </section>
             </component>
+            {% if benefits %}
             <component>
                 <section>
                     <code code="BENEFITS" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Льготы" codeSystemVersion="1.38"/>
+                    {% for benefit in benefits %}
                     <entry>
                         <observation classCode="OBS" moodCode="EVN">
                             <code code="811" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Льготная категория" codeSystemVersion="5.69"/>
-                            <value xsi:type="CD" code="1.00000.0216" codeSystem="1.2.643.5.1.13.13.99.2.541" codeSystemName="Льготные категории граждан" displayName="Инвалиды III группы" codeSystemVersion="6.24"/>
+                            {{ cda.code(benefit.code, tag='value', extra_attrs=' xsi:type="CD"') }}
                         </observation>
                     </entry>
+                    {% endfor %}
                 </section>
             </component>
+            {% endif %}
             <component>
                 <section>
                     <code code="COMPLNTS" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Жалобы" codeSystemVersion="1.38"/>
@@ -227,21 +231,37 @@
                     </entry>
                 </section>
             </component>
+            {% if disabilities %}
             <component>
                 <section>
                     <code code="DISABILITY" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Инвалидность" codeSystemVersion="1.38"/>
+                    {% for dis in disabilities %}
                     <entry>
                         <observation classCode="OBS" moodCode="EVN">
                             <code code="814" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Инвалидность" codeSystemVersion="5.69"/>
                             <effectiveTime>
-                                <low value="{{ event.period.low | hl7date }}"/>
+                                <low value="{{ dis.low | hl7date }}"/>
+                                {% if dis.high %}
+                                <high value="{{ dis.high | hl7date }}"/>
+                                {% else %}
                                 <high nullFlavor="PINF"/>
+                                {% endif %}
                             </effectiveTime>
-                            <value xsi:type="CD" code="3" codeSystem="1.2.643.5.1.13.13.11.1053" codeSystemName="Группы инвалидности" displayName="Третья группа" codeSystemVersion="3.4"/>
+                            {{ cda.code(dis.group, tag='value', extra_attrs=' xsi:type="CD"') }}
+                            {% if dis.establishment_type %}
+                            <entryRelationship typeCode="COMP">
+                                <observation classCode="OBS" moodCode="EVN">
+                                    <code code="815" codeSystem="1.2.643.5.1.13.13.99.2.166" codeSystemName="Кодируемые поля CDA документов" displayName="Порядок установления инвалидности" codeSystemVersion="5.69"/>
+                                    {{ cda.code(dis.establishment_type, tag='value', extra_attrs=' xsi:type="CD"') }}
+                                </observation>
+                            </entryRelationship>
+                            {% endif %}
                         </observation>
                     </entry>
+                    {% endfor %}
                 </section>
             </component>
+            {% endif %}
             <component>
                 <section>
                     <code code="SOCANAM" codeSystem="1.2.643.5.1.13.13.99.2.197" codeSystemName="Секции электронных медицинских документов" displayName="Социальный анамнез" codeSystemVersion="1.38"/>

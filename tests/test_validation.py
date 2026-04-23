@@ -231,6 +231,29 @@ def full_render_data():
             },
         ],
         "recommendations": "Тестовые рекомендации",
+        "benefits": [
+            {
+                "code": {
+                    "code": "1.00000.0216",
+                    "codeSystem": "1.2.643.5.1.13.13.99.2.541",
+                    "codeSystemName": "Льготные категории граждан",
+                    "displayName": "Инвалиды III группы",
+                    "codeSystemVersion": "6.24",
+                }
+            }
+        ],
+        "disabilities": [
+            {
+                "group": {
+                    "code": "3",
+                    "codeSystem": "1.2.643.5.1.13.13.11.1053",
+                    "codeSystemName": "Группы инвалидности",
+                    "displayName": "Третья группа",
+                    "codeSystemVersion": "3.4",
+                },
+                "low": "2026-04-21",
+            }
+        ],
     }
 
 

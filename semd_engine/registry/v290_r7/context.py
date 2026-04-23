@@ -36,6 +36,17 @@ class IdentityDocModel(BaseModel):
     issue_date: str
 
 
+class DisabilityModel(BaseModel):
+    group: CDWithVersion
+    low: str
+    high: str | None = None
+    establishment_type: CDWithVersion | None = None
+
+
+class BenefitModel(BaseModel):
+    code: CDWithVersion
+
+
 class InsurancePolicyModel(BaseModel):
     type: CDWithVersion
     number: str
@@ -108,6 +119,9 @@ class ConsultationProtocolV7RenderContext(ConsultationProtocolV7):
     event: EventModel
     encounter: EncounterModel
     document_info: DocumentInfoModel
+
+    disabilities: list[DisabilityModel] = Field(default_factory=list)
+    benefits: list[BenefitModel] = Field(default_factory=list)
 
     # Переопределяем поля из базовой модели, если нужно,
     # но ConsultationProtocolV7 уже содержит всё необходимое для payload.
