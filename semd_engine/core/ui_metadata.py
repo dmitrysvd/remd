@@ -2,10 +2,23 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from dataclasses import field as dc_field
+from enum import StrEnum
 from typing import TYPE_CHECKING, Any, Literal
 
 if TYPE_CHECKING:
     pass
+
+
+class UIComponentType(StrEnum):
+    """Типы UI компонентов."""
+
+    TEXT_INPUT = "TextInput"
+    TEXT_AREA = "TextArea"
+    SELECT = "Select"
+    NSI_AUTOCOMPLETE = "NSIAutocomplete"
+    DATE_PICKER = "DatePicker"
+    NUMBER_INPUT = "NumberInput"
+    SWITCH = "Switch"
 
 
 @dataclass
@@ -21,7 +34,7 @@ class UICondition:
 class UIFieldMetadata:
     """Метаданные для рендеринга поля на фронтенде."""
 
-    component: str  # Тип компонента: 'TextInput', 'Select', 'NSIAutocomplete', etc.
+    component: UIComponentType  # Тип компонента
     label: str
     placeholder: str | None = None
     hint: str | None = None
@@ -88,7 +101,7 @@ def get_ui_schema_for_model(model_cls: Any) -> dict[str, Any]:
             # Если метаданных нет, но поле примитивное - добавляем дефолтные
             if not field_meta:
                 field_meta = {
-                    "component": "TextInput",
+                    "component": UIComponentType.TEXT_INPUT,
                     "label": name.replace("_", " ").capitalize(),
                 }
             ui_schema[name] = field_meta
